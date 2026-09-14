@@ -1,0 +1,3181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+
+<title>Image Metadata Extractor - PixelTools</title>
+
+<style>
+/* =========================================================
+   PIXELTOOLS - IMAGE METADATA EXTRACTOR
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #080d1c;
+    --bg2: #0d1428;
+
+    --card: rgba(20, 28, 52, 0.78);
+    --card2: rgba(255, 255, 255, 0.045);
+
+    --border: rgba(255, 255, 255, 0.10);
+
+    --text: #f5f7ff;
+    --muted: #9ba8c7;
+
+    --blue: #5b8cff;
+    --purple: #a855f7;
+    --pink: #ff4f9a;
+    --cyan: #26e0ff;
+    --green: #45e6a1;
+    --orange: #ffb454;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text);
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(91,140,255,.16),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(255,79,154,.14),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 50% 95%,
+            rgba(38,224,255,.10),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #080d1c,
+            #0c1327 45%,
+            #10172c
+        );
+
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.grid {
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 50px 50px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 85%
+    );
+
+    opacity: .35;
+}
+
+.orb {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    filter: blur(80px);
+
+    opacity: .20;
+
+    animation:
+        orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb1 {
+    background: #536dff;
+    left: -130px;
+    top: 120px;
+}
+
+.orb2 {
+    background: #ff3d9a;
+    right: -130px;
+    top: 350px;
+
+    animation-delay: 2s;
+}
+
+.orb3 {
+    background: #18d9ff;
+    left: 40%;
+    bottom: -180px;
+
+    animation-delay: 4s;
+}
+
+@keyframes orbFloat {
+
+    from {
+        transform:
+            translate3d(0,0,0)
+            scale(1);
+    }
+
+    to {
+        transform:
+            translate3d(55px,-40px,0)
+            scale(1.15);
+    }
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    position: relative;
+    z-index: 10;
+
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+
+    background:
+        rgba(7,12,26,.72);
+
+    border-bottom:
+        1px solid var(--border);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.logo {
+    text-decoration: none;
+    color: white;
+
+    font-size: 26px;
+    font-weight: 900;
+
+    letter-spacing: -1.2px;
+}
+
+.logo span {
+    background:
+        linear-gradient(
+            90deg,
+            #5b8cff,
+            #b75cff,
+            #ff4f9a,
+            #26e0ff
+        );
+
+    background-size: 250% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    animation:
+        logoGradient 4s linear infinite;
+}
+
+@keyframes logoGradient {
+
+    to {
+        background-position:
+            250% center;
+    }
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    text-decoration: none;
+
+    color: #e2e8ff;
+
+    padding: 10px 16px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--border);
+
+    transition: .25s;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+
+    background:
+        rgba(91,140,255,.12);
+
+    border-color:
+        rgba(91,140,255,.45);
+}
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.container {
+    position: relative;
+    z-index: 2;
+
+    width: min(1180px, 92%);
+
+    margin: auto;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    text-align: center;
+
+    padding:
+        62px 0 40px;
+}
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 15px;
+
+    border-radius: 50px;
+
+    color: #b8caff;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    background:
+        rgba(91,140,255,.08);
+
+    border:
+        1px solid rgba(91,140,255,.25);
+
+    box-shadow:
+        0 0 25px
+        rgba(91,140,255,.08);
+
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size:
+        clamp(40px, 6vw, 70px);
+
+    line-height: 1;
+
+    font-weight: 950;
+
+    letter-spacing: -3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5b8cff,
+            #a855f7,
+            #ff4f9a,
+            #26e0ff,
+            #5b8cff
+        );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    animation:
+        heroGradient 5s linear infinite;
+}
+
+@keyframes heroGradient {
+
+    to {
+        background-position:
+            300% center;
+    }
+}
+
+.hero p {
+    max-width: 720px;
+
+    margin:
+        22px auto 0;
+
+    color: var(--muted);
+
+    line-height: 1.75;
+
+    font-size: 16px;
+}
+
+/* =========================================================
+   MAIN APPLICATION CARD
+   ========================================================= */
+
+.main-card {
+    position: relative;
+
+    padding: 28px;
+
+    margin-bottom: 45px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24,34,62,.82),
+            rgba(13,20,39,.78)
+        );
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.30);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.main-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+    top: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(91,140,255,.7),
+            rgba(255,79,154,.7),
+            transparent
+        );
+
+    opacity: .7;
+}
+
+/* =========================================================
+   UPLOAD AREA
+   ========================================================= */
+
+.upload-box {
+    position: relative;
+
+    display: block;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    padding:
+        58px 25px;
+
+    border-radius: 23px;
+
+    border:
+        2px dashed
+        rgba(91,140,255,.38);
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(91,140,255,.10),
+            transparent 45%
+        ),
+        rgba(91,140,255,.035);
+
+    overflow: hidden;
+
+    transition:
+        transform .3s,
+        border-color .3s,
+        background .3s;
+}
+
+.upload-box::before {
+    content: "";
+
+    position: absolute;
+
+    width: 200px;
+    height: 200px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(91,140,255,.10);
+
+    filter: blur(50px);
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    opacity: 0;
+
+    transition: .3s;
+}
+
+.upload-box:hover::before,
+.upload-box.dragover::before {
+    opacity: 1;
+}
+
+.upload-box:hover,
+.upload-box.dragover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(105,151,255,.9);
+
+    background:
+        rgba(91,140,255,.09);
+
+    box-shadow:
+        0 20px 50px
+        rgba(91,140,255,.10);
+}
+
+.upload-icon {
+    position: relative;
+    z-index: 1;
+
+    width: 78px;
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin:
+        0 auto 18px;
+
+    border-radius: 22px;
+
+    font-size: 36px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(91,140,255,.18),
+            rgba(168,85,247,.18)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.18);
+
+    animation:
+        uploadFloat 3s ease-in-out infinite;
+}
+
+@keyframes uploadFloat {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+.upload-box strong,
+.upload-box small {
+    position: relative;
+    z-index: 1;
+}
+
+.upload-box strong {
+    display: block;
+
+    font-size: 20px;
+
+    margin-bottom: 8px;
+}
+
+.upload-box small {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+#fileInput {
+    display: none;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error {
+    display: none;
+
+    margin-top: 16px;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    color: #ffc0d1;
+
+    background:
+        rgba(255,79,154,.08);
+
+    border:
+        1px solid
+        rgba(255,79,154,.22);
+}
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+.preview-section {
+    display: none;
+
+    margin-top: 28px;
+
+    animation:
+        fadeUp .5s ease both;
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.preview-grid {
+    display: grid;
+
+    grid-template-columns:
+        380px 1fr;
+
+    gap: 22px;
+}
+
+/* =========================================================
+   IMAGE PREVIEW
+   ========================================================= */
+
+.image-preview {
+    position: relative;
+
+    min-height: 360px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background-color: #18213a;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            #222d49 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            -45deg,
+            #222d49 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 75%,
+            #222d49 75%
+        ),
+        linear-gradient(
+            -45deg,
+            transparent 75%,
+            #222d49 75%
+        );
+
+    background-size: 28px 28px;
+
+    background-position:
+        0 0,
+        0 14px,
+        14px -14px,
+        -14px 0;
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        inset 0 0 50px
+        rgba(0,0,0,.20);
+}
+
+.image-preview::after {
+    content: "PREVIEW";
+
+    position: absolute;
+
+    top: 13px;
+    left: 13px;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(8,13,28,.75);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    color: #9ba8c7;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.image-preview img {
+    max-width: 92%;
+    max-height: 430px;
+
+    object-fit: contain;
+
+    display: block;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.35);
+}
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 14px;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    letter-spacing: -.3px;
+}
+
+.section-title .icon {
+    width: 31px;
+    height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background:
+        rgba(91,140,255,.10);
+
+    border:
+        1px solid
+        rgba(91,140,255,.15);
+}
+
+/* =========================================================
+   FILE INFORMATION
+   ========================================================= */
+
+.file-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 11px;
+}
+
+.info-card {
+    position: relative;
+
+    padding: 17px;
+
+    min-height: 82px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--border);
+
+    overflow: hidden;
+
+    transition: .25s;
+}
+
+.info-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    right: -35px;
+    bottom: -35px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(91,140,255,.10);
+
+    filter: blur(15px);
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(91,140,255,.25);
+
+    background:
+        rgba(255,255,255,.055);
+}
+
+.info-card span {
+    display: block;
+
+    color: #7785a5;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+    margin-bottom: 7px;
+}
+
+.info-card strong {
+    display: block;
+
+    color: #f4f7ff;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.section {
+    margin-top: 30px;
+}
+
+/* =========================================================
+   GPS
+   ========================================================= */
+
+.gps-card {
+    display: none;
+
+    position: relative;
+
+    padding: 23px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(69,230,161,.08),
+            rgba(38,224,255,.04)
+        );
+
+    border:
+        1px solid
+        rgba(69,230,161,.23);
+
+    box-shadow:
+        0 15px 40px
+        rgba(69,230,161,.05);
+}
+
+.gps-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(69,230,161,.09);
+
+    filter: blur(45px);
+
+    right: -80px;
+    top: -80px;
+}
+
+.gps-status {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+
+    color: #c9ffe8;
+
+    font-size: 13px;
+}
+
+.gps-dot {
+    width: 10px;
+    height: 10px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 0 5px
+        rgba(69,230,161,.08),
+        0 0 18px
+        rgba(69,230,161,.8);
+
+    animation:
+        gpsPulse 2s infinite;
+}
+
+@keyframes gpsPulse {
+
+    50% {
+        box-shadow:
+            0 0 0 9px
+            rgba(69,230,161,.02),
+            0 0 25px
+            rgba(69,230,161,.9);
+    }
+}
+
+.coordinates {
+    position: relative;
+
+    font-size:
+        clamp(20px,4vw,29px);
+
+    font-weight: 900;
+
+    letter-spacing: -.8px;
+
+    margin-bottom: 18px;
+
+    word-break: break-word;
+}
+
+.map-buttons {
+    position: relative;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.map-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 11px 15px;
+
+    border-radius: 11px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    transition: .25s;
+}
+
+.map-btn:hover {
+    transform: translateY(-2px);
+
+    background:
+        rgba(255,255,255,.12);
+
+    border-color:
+        rgba(255,255,255,.20);
+}
+
+/* =========================================================
+   NO DATA
+   ========================================================= */
+
+.no-data {
+    padding: 18px;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    color: #8e9bb8;
+
+    background:
+        rgba(255,255,255,.03);
+
+    border:
+        1px solid var(--border);
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   METADATA GRID
+   ========================================================= */
+
+.metadata-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 11px;
+}
+
+.meta-row {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-height: 62px;
+
+    padding: 13px 15px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--border);
+
+    overflow: hidden;
+
+    transition: .25s;
+}
+
+.meta-row::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background:
+        linear-gradient(
+            #5b8cff,
+            #a855f7
+        );
+
+    opacity: .55;
+}
+
+.meta-row:hover {
+    transform: translateY(-2px);
+
+    background:
+        rgba(255,255,255,.055);
+
+    border-color:
+        rgba(91,140,255,.22);
+}
+
+.meta-name {
+    color: #96a5c5;
+
+    font-size: 12px;
+
+    flex-shrink: 0;
+}
+
+.meta-value {
+    color: #f2f5ff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-align: right;
+
+    word-break: break-word;
+}
+
+/* =========================================================
+   RAW METADATA
+   ========================================================= */
+
+.raw-section {
+    margin-top: 28px;
+}
+
+details {
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid var(--border);
+}
+
+summary {
+    cursor: pointer;
+
+    padding: 17px 18px;
+
+    color: #e3eaff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    user-select: none;
+
+    transition: .2s;
+}
+
+summary:hover {
+    background:
+        rgba(255,255,255,.035);
+}
+
+.raw-table-wrap {
+    overflow-x: auto;
+
+    border-top:
+        1px solid var(--border);
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+}
+
+th,
+td {
+    padding:
+        12px 15px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+
+    font-size: 12px;
+
+    vertical-align: top;
+}
+
+th {
+    color: #8fa4d4;
+
+    background:
+        rgba(255,255,255,.025);
+
+    text-transform: uppercase;
+
+    letter-spacing: .6px;
+
+    font-size: 10px;
+}
+
+td:first-child {
+    width: 30%;
+
+    color: #9eadd0;
+
+    font-weight: 700;
+}
+
+td {
+    color: #dce5fa;
+
+    word-break: break-word;
+}
+
+tr:hover td {
+    background:
+        rgba(255,255,255,.025);
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions {
+    display: flex;
+
+    gap: 11px;
+
+    margin-top: 25px;
+}
+
+.action-btn {
+    position: relative;
+
+    border: none;
+
+    padding:
+        13px 18px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    transition:
+        transform .25s,
+        background .25s,
+        box-shadow .25s;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #527eff,
+            #a550ff
+        );
+
+    box-shadow:
+        0 10px 30px
+        rgba(91,140,255,.20);
+}
+
+.primary:hover {
+    box-shadow:
+        0 15px 35px
+        rgba(91,140,255,.30);
+}
+
+.secondary {
+    color: #dce5ff;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid var(--border);
+}
+
+.secondary:hover {
+    background:
+        rgba(255,255,255,.10);
+}
+
+/* =========================================================
+   PRIVACY NOTICE
+   ========================================================= */
+
+.notice {
+    position: relative;
+
+    margin-top: 20px;
+
+    padding: 16px 18px;
+
+    border-radius: 15px;
+
+    color: #a7b5ce;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(38,224,255,.045),
+            rgba(91,140,255,.025)
+        );
+
+    border:
+        1px solid
+        rgba(38,224,255,.12);
+
+    font-size: 12px;
+
+    line-height: 1.75;
+}
+
+.notice strong {
+    color: #d8f8ff;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+
+    color: #66738f;
+
+    padding:
+        5px 0 40px;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading {
+    display: none;
+
+    text-align: center;
+
+    margin-top: 18px;
+
+    color: #9eb3df;
+
+    font-size: 13px;
+}
+
+.loading-dot {
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--blue);
+
+    margin: 0 3px;
+
+    animation:
+        loadingBounce 1s infinite;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes loadingBounce {
+
+    0%,100% {
+        transform: translateY(0);
+        opacity: .4;
+    }
+
+    50% {
+        transform: translateY(-5px);
+        opacity: 1;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:900px) {
+
+    .preview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .image-preview {
+        min-height: 300px;
+    }
+}
+
+@media(max-width:700px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .back-btn {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    .hero {
+        padding:
+            45px 0 30px;
+    }
+
+    .hero h1 {
+        font-size: 44px;
+        letter-spacing: -2px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .main-card {
+        padding: 17px;
+        border-radius: 21px;
+    }
+
+    .upload-box {
+        padding:
+            45px 16px;
+    }
+
+    .metadata-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .file-info {
+        grid-template-columns: 1fr;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        width: 100%;
+    }
+
+    .coordinates {
+        font-size: 20px;
+    }
+}
+
+@media(max-width:450px) {
+
+    .navbar {
+        height: 68px;
+    }
+
+    .back-btn {
+        font-size: 0;
+    }
+
+    .back-btn::before {
+        content: "←";
+        font-size: 18px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .upload-icon {
+        width: 65px;
+        height: 65px;
+
+        font-size: 30px;
+    }
+
+    .upload-box strong {
+        font-size: 17px;
+    }
+
+    .meta-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .meta-value {
+        text-align: left;
+    }
+
+    .map-buttons {
+        flex-direction: column;
+    }
+
+    .map-btn {
+        width: 100%;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<!-- =======================================================
+     BACKGROUND
+     ======================================================= -->
+
+<div class="background">
+    <div class="grid"></div>
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+</div>
+
+
+<!-- =======================================================
+     NAVBAR
+     ======================================================= -->
+
+<nav class="navbar">
+
+    <a
+        href="../index.html"
+        class="logo"
+    >
+        Pixel<span>Tools</span>
+    </a>
+
+    <a
+        href="../index.html"
+        class="back-btn"
+    >
+        ← Back to PixelTools
+    </a>
+
+</nav>
+
+
+<!-- =======================================================
+     MAIN
+     ======================================================= -->
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="badge">
+            🔍 EXIF
+            <span>•</span>
+            GPS
+            <span>•</span>
+            Camera
+            <span>•</span>
+            Lens
+            <span>•</span>
+            More
+        </div>
+
+        <h1>
+            Image Metadata<br>
+            Extractor
+        </h1>
+
+        <p>
+            Reveal useful information hidden inside your images.
+            Check camera details, lens information, GPS coordinates,
+            dates, exposure settings and more — directly in your browser.
+        </p>
+
+    </section>
+
+
+    <!-- APPLICATION -->
+
+    <div class="main-card">
+
+        <!-- UPLOAD -->
+
+        <label
+            class="upload-box"
+            id="uploadBox"
+        >
+
+            <div class="upload-icon">
+                📸
+            </div>
+
+            <strong>
+                Drop your image here
+            </strong>
+
+            <small>
+                Click to browse or drag & drop
+                • JPG • JPEG • TIFF • PNG • WEBP
+            </small>
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+            >
+
+        </label>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading"
+        >
+            Reading image metadata
+
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error"
+            id="errorBox"
+        ></div>
+
+
+        <!-- RESULTS -->
+
+        <section
+            class="preview-section"
+            id="previewSection"
+        >
+
+            <!-- IMAGE + FILE INFO -->
+
+            <div class="preview-grid">
+
+                <!-- IMAGE -->
+
+                <div class="image-preview">
+
+                    <img
+                        id="previewImage"
+                        alt="Selected image"
+                    >
+
+                </div>
+
+
+                <!-- FILE INFORMATION -->
+
+                <div>
+
+                    <h2 class="section-title">
+
+                        <span class="icon">
+                            📁
+                        </span>
+
+                        File Information
+
+                    </h2>
+
+
+                    <div class="file-info">
+
+                        <div class="info-card">
+                            <span>File Name</span>
+                            <strong id="fileName">—</strong>
+                        </div>
+
+                        <div class="info-card">
+                            <span>File Size</span>
+                            <strong id="fileSize">—</strong>
+                        </div>
+
+                        <div class="info-card">
+                            <span>File Type</span>
+                            <strong id="fileType">—</strong>
+                        </div>
+
+                        <div class="info-card">
+                            <span>Dimensions</span>
+                            <strong id="dimensions">—</strong>
+                        </div>
+
+                        <div class="info-card">
+                            <span>Last Modified</span>
+                            <strong id="modified">—</strong>
+                        </div>
+
+                        <div class="info-card">
+                            <span>Metadata Fields</span>
+                            <strong id="fieldCount">0</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 GPS
+                 ================================================= -->
+
+            <div class="section">
+
+                <h2 class="section-title">
+
+                    <span class="icon">
+                        📍
+                    </span>
+
+                    GPS Location
+
+                </h2>
+
+
+                <div
+                    class="gps-card"
+                    id="gpsCard"
+                >
+
+                    <div class="gps-status">
+
+                        <span class="gps-dot"></span>
+
+                        <strong>
+                            GPS coordinates found in this image
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        class="coordinates"
+                        id="coordinates"
+                    >
+                        —
+                    </div>
+
+
+                    <div
+                        class="map-buttons"
+                        id="mapButtons"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="no-data"
+                    id="noGps"
+                >
+                    📍 No GPS location was found in this image.
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMPORTANT METADATA
+                 ================================================= -->
+
+            <div class="section">
+
+                <h2 class="section-title">
+
+                    <span class="icon">
+                        📷
+                    </span>
+
+                    Camera & Image Details
+
+                </h2>
+
+
+                <div
+                    class="metadata-grid"
+                    id="importantMetadata"
+                ></div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RAW METADATA
+                 ================================================= -->
+
+            <div class="raw-section">
+
+                <details>
+
+                    <summary>
+                        🔎 View All Available Metadata
+                    </summary>
+
+
+                    <div class="raw-table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>
+                                        Metadata Field
+                                    </th>
+
+                                    <th>
+                                        Value
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody
+                                id="rawTable"
+                            ></tbody>
+
+                        </table>
+
+                    </div>
+
+                </details>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button
+                    class="action-btn primary"
+                    id="copyBtn"
+                >
+                    📋 Copy Metadata
+                </button>
+
+                <button
+                    class="action-btn secondary"
+                    id="resetBtn"
+                >
+                    ↺ Analyze Another Image
+                </button>
+
+            </div>
+
+
+            <!-- PRIVACY -->
+
+            <div class="notice">
+
+                🔒
+                <strong>Privacy First:</strong>
+
+                Your image is processed locally in your browser.
+                PixelTools does not upload your image to a server.
+
+                Only metadata embedded inside the image can be extracted.
+
+                <br><br>
+
+                ⚠️
+                <strong>Location Warning:</strong>
+
+                GPS metadata can reveal where a photograph was taken.
+                Be careful when sharing images that contain location information.
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- =======================================================
+     FOOTER
+     ======================================================= -->
+
+<footer>
+
+    ©
+    <span id="year"></span>
+
+    PixelTools
+
+    — Powerful tools,
+    right in your browser.
+
+</footer>
+
+
+<!-- =======================================================
+     EXIF LIBRARY
+     ======================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js"></script>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+const previewSection =
+    document.getElementById("previewSection");
+
+const previewImage =
+    document.getElementById("previewImage");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+const loading =
+    document.getElementById("loading");
+
+const gpsCard =
+    document.getElementById("gpsCard");
+
+const noGps =
+    document.getElementById("noGps");
+
+const coordinates =
+    document.getElementById("coordinates");
+
+const mapButtons =
+    document.getElementById("mapButtons");
+
+const importantMetadata =
+    document.getElementById("importantMetadata");
+
+const rawTable =
+    document.getElementById("rawTable");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+
+let extractedData = {};
+
+let currentFile = null;
+
+let currentImageURL = null;
+
+
+/* =========================================================
+   FILE SELECT
+   ========================================================= */
+
+uploadBox.addEventListener(
+    "click",
+    () => {
+
+        fileInput.click();
+
+    }
+);
+
+
+fileInput.addEventListener(
+    "change",
+    event => {
+
+        const file =
+            event.target.files[0];
+
+        if (file) {
+
+            analyzeImage(file);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DRAG & DROP
+   ========================================================= */
+
+uploadBox.addEventListener(
+    "dragover",
+    event => {
+
+        event.preventDefault();
+
+        uploadBox.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "dragleave",
+    () => {
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "drop",
+    event => {
+
+        event.preventDefault();
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+        const file =
+            event.dataTransfer.files[0];
+
+        if (
+            file &&
+            file.type.startsWith("image/")
+        ) {
+
+            analyzeImage(file);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ANALYZE IMAGE
+   ========================================================= */
+
+async function analyzeImage(file) {
+
+    hideError();
+
+    currentFile = file;
+
+    extractedData = {};
+
+
+    if (currentImageURL) {
+
+        URL.revokeObjectURL(
+            currentImageURL
+        );
+
+    }
+
+
+    currentImageURL =
+        URL.createObjectURL(file);
+
+
+    previewImage.src =
+        currentImageURL;
+
+
+    previewSection.style.display =
+        "block";
+
+
+    loading.style.display =
+        "block";
+
+
+    /* FILE INFORMATION */
+
+    document.getElementById(
+        "fileName"
+    ).textContent =
+        file.name;
+
+
+    document.getElementById(
+        "fileSize"
+    ).textContent =
+        formatBytes(file.size);
+
+
+    document.getElementById(
+        "fileType"
+    ).textContent =
+        file.type ||
+        "Unknown";
+
+
+    document.getElementById(
+        "modified"
+    ).textContent =
+        new Date(
+            file.lastModified
+        ).toLocaleString();
+
+
+    previewImage.onload =
+        () => {
+
+            document.getElementById(
+                "dimensions"
+            ).textContent =
+                `${previewImage.naturalWidth} × ${previewImage.naturalHeight}`;
+
+        };
+
+
+    /* CLEAR PREVIOUS RESULTS */
+
+    importantMetadata.innerHTML =
+        "";
+
+    rawTable.innerHTML =
+        "";
+
+    gpsCard.style.display =
+        "none";
+
+    noGps.style.display =
+        "block";
+
+    mapButtons.innerHTML =
+        "";
+
+
+    try {
+
+        if (
+            typeof exifr === "undefined"
+        ) {
+
+            throw new Error(
+                "Metadata library could not be loaded."
+            );
+
+        }
+
+
+        const data =
+            await exifr.parse(
+                file,
+                {
+                    tiff: true,
+                    exif: true,
+                    ifd0: true,
+                    gps: true,
+                    interop: true,
+
+                    translateValues: true,
+
+                    reviveValues: true
+                }
+            );
+
+
+        extractedData =
+            data || {};
+
+
+        renderMetadata(
+            extractedData
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Metadata extraction error:",
+            error
+        );
+
+
+        showError(
+            "Could not read the metadata from this image. " +
+            "The image may not contain EXIF metadata or " +
+            "its format may not be fully supported."
+        );
+
+
+        document.getElementById(
+            "fieldCount"
+        ).textContent =
+            "0";
+
+    }
+
+
+    loading.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   RENDER METADATA
+   ========================================================= */
+
+function renderMetadata(data) {
+
+    const keys =
+        Object.keys(data);
+
+
+    document.getElementById(
+        "fieldCount"
+    ).textContent =
+        keys.length;
+
+
+    renderGPS(data);
+
+    renderImportantMetadata(data);
+
+    renderRawMetadata(data);
+}
+
+
+/* =========================================================
+   GPS
+   ========================================================= */
+
+function renderGPS(data) {
+
+    let lat =
+        data.latitude ??
+        data.GPSLatitude ??
+        data.Latitude;
+
+    let lon =
+        data.longitude ??
+        data.GPSLongitude ??
+        data.Longitude;
+
+
+    if (
+        (!lat || !lon) &&
+        data.gps
+    ) {
+
+        lat =
+            data.gps.latitude ??
+            data.gps.Latitude;
+
+        lon =
+            data.gps.longitude ??
+            data.gps.Longitude;
+
+    }
+
+
+    if (
+        typeof lat === "number" &&
+        typeof lon === "number" &&
+        Number.isFinite(lat) &&
+        Number.isFinite(lon)
+    ) {
+
+        gpsCard.style.display =
+            "block";
+
+        noGps.style.display =
+            "none";
+
+
+        coordinates.textContent =
+            `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+
+
+        mapButtons.innerHTML =
+            "";
+
+
+        /* GOOGLE MAPS */
+
+        const google =
+            document.createElement("a");
+
+        google.className =
+            "map-btn";
+
+        google.target =
+            "_blank";
+
+        google.rel =
+            "noopener noreferrer";
+
+        google.href =
+            `https://www.google.com/maps?q=${encodeURIComponent(
+                lat
+            )},${encodeURIComponent(
+                lon
+            )}`;
+
+        google.textContent =
+            "🌐 Open Google Maps";
+
+
+        /* OPEN STREET MAP */
+
+        const osm =
+            document.createElement("a");
+
+        osm.className =
+            "map-btn";
+
+        osm.target =
+            "_blank";
+
+        osm.rel =
+            "noopener noreferrer";
+
+        osm.href =
+            `https://www.openstreetmap.org/?mlat=${encodeURIComponent(
+                lat
+            )}&mlon=${encodeURIComponent(
+                lon
+            )}#map=17/${encodeURIComponent(
+                lat
+            )}/${encodeURIComponent(
+                lon
+            )}`;
+
+        osm.textContent =
+            "🗺️ OpenStreetMap";
+
+
+        mapButtons.appendChild(
+            google
+        );
+
+        mapButtons.appendChild(
+            osm
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   IMPORTANT METADATA
+   ========================================================= */
+
+function renderImportantMetadata(data) {
+
+    const fields = [
+
+        [
+            "Camera Make",
+            [
+                "Make",
+                "cameraMake"
+            ]
+        ],
+
+        [
+            "Camera Model",
+            [
+                "Model",
+                "cameraModel"
+            ]
+        ],
+
+        [
+            "Lens",
+            [
+                "LensModel",
+                "Lens"
+            ]
+        ],
+
+        [
+            "Date Taken",
+            [
+                "DateTimeOriginal",
+                "CreateDate",
+                "DateTimeDigitized"
+            ]
+        ],
+
+        [
+            "Software",
+            [
+                "Software"
+            ]
+        ],
+
+        [
+            "ISO",
+            [
+                "ISO",
+                "ISOSpeedRatings"
+            ]
+        ],
+
+        [
+            "Exposure Time",
+            [
+                "ExposureTime"
+            ]
+        ],
+
+        [
+            "F-Number",
+            [
+                "FNumber"
+            ]
+        ],
+
+        [
+            "Focal Length",
+            [
+                "FocalLength"
+            ]
+        ],
+
+        [
+            "Flash",
+            [
+                "Flash"
+            ]
+        ],
+
+        [
+            "Orientation",
+            [
+                "Orientation"
+            ]
+        ],
+
+        [
+            "Color Space",
+            [
+                "ColorSpace"
+            ]
+        ],
+
+        [
+            "Altitude",
+            [
+                "GPSAltitude",
+                "altitude"
+            ]
+        ],
+
+        [
+            "Artist",
+            [
+                "Artist"
+            ]
+        ],
+
+        [
+            "Copyright",
+            [
+                "Copyright"
+            ]
+        ]
+
+    ];
+
+
+    let count = 0;
+
+
+    fields.forEach(
+        ([label, possibleKeys]) => {
+
+            const key =
+                possibleKeys.find(
+                    k =>
+                        data[k] !== undefined &&
+                        data[k] !== null &&
+                        data[k] !== ""
+                );
+
+
+            if (!key) {
+                return;
+            }
+
+
+            const value =
+                formatMetadataValue(
+                    data[key],
+                    key
+                );
+
+
+            addImportantRow(
+                label,
+                value
+            );
+
+
+            count++;
+
+        }
+    );
+
+
+    if (count === 0) {
+
+        importantMetadata.innerHTML = `
+
+            <div
+                class="no-data"
+                style="grid-column:1/-1;"
+            >
+
+                📷 No common camera EXIF metadata
+                was found in this image.
+
+                <br>
+
+                The image may contain little
+                or no metadata.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   ADD IMPORTANT ROW
+   ========================================================= */
+
+function addImportantRow(
+    name,
+    value
+) {
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "meta-row";
+
+
+    const nameElement =
+        document.createElement("span");
+
+    nameElement.className =
+        "meta-name";
+
+    nameElement.textContent =
+        name;
+
+
+    const valueElement =
+        document.createElement("span");
+
+    valueElement.className =
+        "meta-value";
+
+    valueElement.textContent =
+        value;
+
+
+    row.appendChild(
+        nameElement
+    );
+
+    row.appendChild(
+        valueElement
+    );
+
+
+    importantMetadata.appendChild(
+        row
+    );
+
+}
+
+
+/* =========================================================
+   RAW METADATA
+   ========================================================= */
+
+function renderRawMetadata(data) {
+
+    const entries =
+        Object.entries(data);
+
+
+    if (!entries.length) {
+
+        rawTable.innerHTML = `
+
+            <tr>
+
+                <td colspan="2">
+                    No metadata found.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    entries
+        .sort(
+            ([a], [b]) =>
+                a.localeCompare(b)
+        )
+
+        .forEach(
+            ([key, value]) => {
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                const tdKey =
+                    document.createElement(
+                        "td"
+                    );
+
+                tdKey.textContent =
+                    key;
+
+
+                const tdValue =
+                    document.createElement(
+                        "td"
+                    );
+
+                tdValue.textContent =
+                    formatMetadataValue(
+                        value,
+                        key
+                    );
+
+
+                tr.appendChild(
+                    tdKey
+                );
+
+                tr.appendChild(
+                    tdValue
+                );
+
+
+                rawTable.appendChild(
+                    tr
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   FORMAT METADATA
+   ========================================================= */
+
+function formatMetadataValue(
+    value,
+    key = ""
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "—";
+
+    }
+
+
+    if (
+        value instanceof Date
+    ) {
+
+        return value.toLocaleString();
+
+    }
+
+
+    if (
+        typeof value === "number"
+    ) {
+
+        const lowerKey =
+            key.toLowerCase();
+
+
+        if (
+            lowerKey.includes(
+                "latitude"
+            ) ||
+            lowerKey.includes(
+                "longitude"
+            )
+        ) {
+
+            return value.toFixed(6);
+
+        }
+
+
+        if (
+            key === "FocalLength"
+        ) {
+
+            return value + " mm";
+
+        }
+
+
+        if (
+            key === "FNumber"
+        ) {
+
+            return "f/" +
+                value.toFixed(1);
+
+        }
+
+
+        if (
+            key === "ExposureTime"
+        ) {
+
+            if (
+                value > 0 &&
+                value < 1
+            ) {
+
+                return (
+                    "1/" +
+                    Math.round(
+                        1 / value
+                    ) +
+                    " sec"
+                );
+
+            }
+
+            return value + " sec";
+
+        }
+
+
+        return String(value);
+
+    }
+
+
+    if (
+        Array.isArray(value)
+    ) {
+
+        return value
+            .map(
+                item =>
+                    formatMetadataValue(
+                        item,
+                        key
+                    )
+            )
+            .join(", ");
+
+    }
+
+
+    if (
+        typeof value === "object"
+    ) {
+
+        try {
+
+            return JSON.stringify(
+                value
+            );
+
+        }
+
+        catch {
+
+            return String(value);
+
+        }
+
+    }
+
+
+    return String(value);
+
+}
+
+
+/* =========================================================
+   FORMAT FILE SIZE
+   ========================================================= */
+
+function formatBytes(bytes) {
+
+    if (!bytes) {
+
+        return "0 Bytes";
+
+    }
+
+
+    const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        bytes /
+        Math.pow(
+            1024,
+            index
+        )
+    ).toFixed(
+        index === 0
+            ? 0
+            : 2
+    )
+    +
+    " "
+    +
+    units[index];
+
+}
+
+
+/* =========================================================
+   COPY METADATA
+   ========================================================= */
+
+copyBtn.addEventListener(
+    "click",
+    async () => {
+
+        if (
+            !Object.keys(
+                extractedData
+            ).length
+        ) {
+
+            alert(
+                "No metadata available to copy."
+            );
+
+            return;
+
+        }
+
+
+        let text =
+            "PixelTools - Image Metadata\n\n";
+
+
+        text +=
+            `File: ${
+                currentFile?.name || ""
+            }\n`;
+
+        text +=
+            `Size: ${
+                currentFile
+                    ? formatBytes(
+                        currentFile.size
+                    )
+                    : ""
+            }\n`;
+
+        text +=
+            `Type: ${
+                currentFile?.type || ""
+            }\n\n`;
+
+
+        Object.entries(
+            extractedData
+        ).forEach(
+            ([key, value]) => {
+
+                text +=
+                    `${key}: ${
+                        formatMetadataValue(
+                            value,
+                            key
+                        )
+                    }\n`;
+
+            }
+        );
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+
+            const oldText =
+                copyBtn.textContent;
+
+
+            copyBtn.textContent =
+                "✓ Copied!";
+
+
+            setTimeout(
+                () => {
+
+                    copyBtn.textContent =
+                        oldText;
+
+                },
+                1600
+            );
+
+        }
+
+        catch {
+
+            const textarea =
+                document.createElement(
+                    "textarea"
+                );
+
+            textarea.value =
+                text;
+
+            textarea.style.position =
+                "fixed";
+
+            textarea.style.opacity =
+                "0";
+
+            document.body.appendChild(
+                textarea
+            );
+
+            textarea.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+            textarea.remove();
+
+
+            const oldText =
+                copyBtn.textContent;
+
+
+            copyBtn.textContent =
+                "✓ Copied!";
+
+
+            setTimeout(
+                () => {
+
+                    copyBtn.textContent =
+                        oldText;
+
+                },
+                1600
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+resetBtn.addEventListener(
+    "click",
+    () => {
+
+        fileInput.value =
+            "";
+
+        currentFile =
+            null;
+
+        extractedData =
+            {};
+
+
+        if (currentImageURL) {
+
+            URL.revokeObjectURL(
+                currentImageURL
+            );
+
+            currentImageURL =
+                null;
+
+        }
+
+
+        previewImage.src =
+            "";
+
+        previewSection.style.display =
+            "none";
+
+
+        importantMetadata.innerHTML =
+            "";
+
+        rawTable.innerHTML =
+            "";
+
+
+        gpsCard.style.display =
+            "none";
+
+        noGps.style.display =
+            "block";
+
+
+        mapButtons.innerHTML =
+            "";
+
+
+        document.getElementById(
+            "fieldCount"
+        ).textContent =
+            "0";
+
+
+        hideError();
+
+        loading.style.display =
+            "none";
+
+    }
+);
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function showError(message) {
+
+    errorBox.textContent =
+        message;
+
+    errorBox.style.display =
+        "block";
+
+}
+
+
+function hideError() {
+
+    errorBox.style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   YEAR
+   ========================================================= */
+
+document.getElementById(
+    "year"
+).textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

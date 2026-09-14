@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Metadata Remover - PixelTools</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    color:#fff;
+    background:#101522;
+    overflow-x:hidden;
+}
+
+/* ================= BACKGROUND ================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 15% 20%,rgba(85,80,255,.20),transparent 30%),
+        radial-gradient(circle at 85% 25%,rgba(255,55,190,.15),transparent 30%),
+        radial-gradient(circle at 50% 90%,rgba(0,220,190,.13),transparent 35%),
+        #101522;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(4px);
+    opacity:.42;
+    animation:floatOrb 11s ease-in-out infinite;
+}
+
+.orb1{
+    width:280px;
+    height:280px;
+    left:-120px;
+    top:5%;
+    background:linear-gradient(135deg,#715cff,#00d9ff);
+}
+
+.orb2{
+    width:240px;
+    height:240px;
+    right:-100px;
+    top:35%;
+    background:linear-gradient(135deg,#ff49d4,#ff8b28);
+    animation-delay:2s;
+}
+
+.orb3{
+    width:200px;
+    height:200px;
+    left:40%;
+    bottom:-100px;
+    background:linear-gradient(135deg,#00e6b8,#5d63ff);
+    animation-delay:4s;
+}
+
+@keyframes floatOrb{
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(35px,-35px) scale(1.08);
+    }
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    height:72px;
+    padding:0 7%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    position:sticky;
+    top:0;
+    z-index:20;
+
+    background:rgba(16,21,34,.76);
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+.logo{
+    text-decoration:none;
+    color:#fff;
+    font-size:25px;
+    font-weight:900;
+}
+
+.logo span{
+    background:linear-gradient(
+        90deg,
+        #7c61ff,
+        #00d9ff,
+        #ff55c9
+    );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.back{
+    text-decoration:none;
+    color:#cbd3e7;
+
+    padding:10px 18px;
+
+    border-radius:30px;
+    border:1px solid rgba(255,255,255,.1);
+
+    font-size:14px;
+
+    transition:.3s;
+}
+
+.back:hover{
+    background:rgba(255,255,255,.08);
+    transform:translateY(-2px);
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:min(1100px,92%);
+    margin:auto;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    text-align:center;
+    padding:65px 0 35px;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.1);
+
+    color:#aebcff;
+
+    font-size:13px;
+
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,68px);
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-2px;
+}
+
+.gradient-text{
+    background:linear-gradient(
+        90deg,
+        #775eff,
+        #00d9ff,
+        #58efbd,
+        #ff54c8,
+        #775eff
+    );
+
+    background-size:300% auto;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+
+    animation:gradientMove 5s linear infinite;
+}
+
+@keyframes gradientMove{
+    to{
+        background-position:300% center;
+    }
+}
+
+.hero p{
+    max-width:650px;
+    margin:20px auto 0;
+
+    color:#aab3c8;
+
+    line-height:1.7;
+}
+
+/* ================= TOOL CARD ================= */
+
+.tool-box{
+    padding:28px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,.055);
+
+    border:1px solid rgba(255,255,255,.1);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.25);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+}
+
+/* ================= UPLOAD ================= */
+
+.upload{
+    min-height:230px;
+
+    padding:30px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    border:2px dashed rgba(123,97,255,.55);
+
+    border-radius:24px;
+
+    background:rgba(123,97,255,.035);
+
+    transition:.3s;
+}
+
+.upload:hover,
+.upload.drag{
+    border-color:#00d9ff;
+
+    background:rgba(0,217,255,.06);
+
+    transform:translateY(-3px);
+}
+
+.upload input{
+    display:none;
+}
+
+.upload-icon{
+    width:72px;
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:22px;
+
+    font-size:32px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(123,97,255,.25),
+            rgba(0,217,255,.18)
+        );
+
+    border:1px solid rgba(255,255,255,.1);
+
+    margin-bottom:18px;
+
+    animation:iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+.upload h2{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.upload p{
+    color:#8993aa;
+    font-size:14px;
+}
+
+/* ================= PREVIEW ================= */
+
+.preview-section{
+    display:none;
+    margin-top:25px;
+}
+
+.preview-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.preview-card{
+    padding:15px;
+
+    border-radius:20px;
+
+    background:rgba(0,0,0,.15);
+
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.preview-card h3{
+    font-size:14px;
+    color:#bfc7d9;
+    margin-bottom:12px;
+}
+
+.preview-image{
+    width:100%;
+    height:320px;
+
+    object-fit:contain;
+
+    border-radius:14px;
+
+    background-color:#d5d5d5;
+
+    background-image:
+        linear-gradient(45deg,#bbb 25%,transparent 25%),
+        linear-gradient(-45deg,#bbb 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#bbb 75%),
+        linear-gradient(-45deg,transparent 75%,#bbb 75%);
+
+    background-size:24px 24px;
+
+    background-position:
+        0 0,
+        0 12px,
+        12px -12px,
+        -12px 0;
+}
+
+.file-info{
+    margin-top:12px;
+
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+
+    color:#8b95ab;
+
+    font-size:13px;
+}
+
+/* ================= METADATA INFO ================= */
+
+.metadata-box{
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:rgba(0,0,0,.14);
+
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.metadata-box h3{
+    font-size:15px;
+    margin-bottom:12px;
+}
+
+.metadata-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.metadata-item{
+    padding:12px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.045);
+
+    color:#aab4c9;
+
+    font-size:13px;
+}
+
+.metadata-item strong{
+    display:block;
+
+    color:#fff;
+
+    margin-bottom:5px;
+}
+
+/* ================= STATUS ================= */
+
+.status{
+    display:none;
+
+    margin-top:20px;
+
+    padding:15px 18px;
+
+    border-radius:14px;
+
+    background:rgba(0,217,255,.06);
+
+    border:1px solid rgba(0,217,255,.16);
+
+    color:#b2efff;
+
+    font-size:14px;
+}
+
+.spinner{
+    display:inline-block;
+
+    width:15px;
+    height:15px;
+
+    border:2px solid rgba(255,255,255,.25);
+
+    border-top-color:#00d9ff;
+
+    border-radius:50%;
+
+    animation:spin .7s linear infinite;
+
+    margin-right:8px;
+
+    vertical-align:-3px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= BUTTONS ================= */
+
+.actions{
+    display:flex;
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:25px;
+}
+
+.btn{
+    border:0;
+
+    border-radius:14px;
+
+    padding:14px 23px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.3s;
+}
+
+.primary{
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #705cff,
+            #00bde8
+        );
+
+    box-shadow:
+        0 10px 30px rgba(76,92,255,.2);
+}
+
+.primary:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 15px 35px rgba(76,92,255,.35);
+}
+
+.secondary{
+    color:#d8deed;
+
+    background:rgba(255,255,255,.07);
+
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.secondary:hover{
+    background:rgba(255,255,255,.12);
+
+    transform:translateY(-2px);
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.download{
+    display:none;
+}
+
+/* ================= FEATURES ================= */
+
+.features{
+    margin:35px 0 70px;
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:18px;
+}
+
+.feature{
+    padding:22px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.feature-icon{
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.feature h3{
+    font-size:16px;
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:#8993aa;
+    line-height:1.6;
+    font-size:13px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    padding:30px;
+
+    text-align:center;
+
+    border-top:1px solid rgba(255,255,255,.07);
+
+    color:#727c94;
+
+    font-size:13px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:800px){
+
+    .navbar{
+        padding:0 5%;
+    }
+
+    .tool-box{
+        padding:18px;
+        border-radius:22px;
+    }
+
+    .preview-grid,
+    .metadata-list,
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .preview-image{
+        height:280px;
+    }
+}
+
+@media(max-width:500px){
+
+    .hero{
+        padding-top:45px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .upload{
+        min-height:200px;
+        padding:20px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<!-- BACKGROUND -->
+
+<div class="background">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="../index.html" class="logo">
+        Pixel<span>Tools</span>
+    </a>
+
+    <a href="../index.html" class="back">
+        ← Back to Tools
+    </a>
+
+</nav>
+
+
+<main class="container">
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        🔒 Privacy First
+    </div>
+
+    <h1>
+        Metadata <span class="gradient-text">Remover</span>
+    </h1>
+
+    <p>
+        Remove hidden metadata from your images directly in your browser.
+        Your photos never need to leave your device.
+    </p>
+
+</section>
+
+
+<!-- TOOL -->
+
+<section class="tool-box">
+
+
+<!-- UPLOAD -->
+
+<label class="upload" id="uploadArea">
+
+    <input
+        type="file"
+        id="fileInput"
+        accept="image/jpeg,image/png,image/webp"
+    >
+
+    <div class="upload-icon">
+        🧹
+    </div>
+
+    <h2>
+        Drop your image here
+    </h2>
+
+    <p>
+        or click to browse • JPG, PNG, WEBP
+    </p>
+
+</label>
+
+
+<!-- STATUS -->
+
+<div class="status" id="status"></div>
+
+
+<!-- PREVIEW -->
+
+<div class="preview-section" id="previewSection">
+
+
+    <div class="preview-grid">
+
+
+        <!-- ORIGINAL -->
+
+        <div class="preview-card">
+
+            <h3>
+                Original Image
+            </h3>
+
+            <img
+                id="originalPreview"
+                class="preview-image"
+                alt="Original image"
+            >
+
+            <div class="file-info">
+
+                <span id="originalDimensions">
+                    -
+                </span>
+
+                <span id="originalSize">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CLEAN -->
+
+        <div class="preview-card">
+
+            <h3>
+                Clean Image
+            </h3>
+
+            <img
+                id="cleanPreview"
+                class="preview-image"
+                alt="Clean image"
+            >
+
+            <div class="file-info">
+
+                <span id="cleanDimensions">
+                    -
+                </span>
+
+                <span id="cleanSize">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- METADATA INFO -->
+
+    <div class="metadata-box">
+
+        <h3>
+            🛡️ What gets removed?
+        </h3>
+
+        <div class="metadata-list">
+
+            <div class="metadata-item">
+                <strong>📍 GPS Location</strong>
+                Location metadata is stripped from the exported image.
+            </div>
+
+            <div class="metadata-item">
+                <strong>📷 Camera Data</strong>
+                Camera and device metadata is not copied.
+            </div>
+
+            <div class="metadata-item">
+                <strong>🕐 Date & Time</strong>
+                Embedded image metadata is not preserved.
+            </div>
+
+            <div class="metadata-item">
+                <strong>🔐 Other Metadata</strong>
+                The image is re-encoded without the original metadata.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+        <button
+            class="btn primary"
+            id="removeBtn"
+        >
+            🧹 Remove Metadata
+        </button>
+
+        <a
+            class="btn primary download"
+            id="downloadBtn"
+        >
+            📥 Download Clean Image
+        </a>
+
+        <button
+            class="btn secondary"
+            id="resetBtn"
+        >
+            ↻ Reset
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            🔒
+        </div>
+
+        <h3>
+            Private
+        </h3>
+
+        <p>
+            Processing happens locally in your browser.
+            Your original image is not uploaded to a server.
+        </p>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            📍
+        </div>
+
+        <h3>
+            Remove Location Data
+        </h3>
+
+        <p>
+            Re-encoding prevents the original GPS metadata
+            from being copied into the exported image.
+        </p>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            ⚡
+        </div>
+
+        <h3>
+            Simple & Fast
+        </h3>
+
+        <p>
+            No account, no upload and no external processing
+            service is required.
+        </p>
+
+    </div>
+
+
+</section>
+
+</main>
+
+
+<footer>
+
+    © <span id="year"></span>
+    PixelTools • Image Metadata Remover
+
+</footer>
+
+
+<script>
+
+/* ================= ELEMENTS ================= */
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const uploadArea =
+    document.getElementById("uploadArea");
+
+const previewSection =
+    document.getElementById("previewSection");
+
+const originalPreview =
+    document.getElementById("originalPreview");
+
+const cleanPreview =
+    document.getElementById("cleanPreview");
+
+const originalDimensions =
+    document.getElementById("originalDimensions");
+
+const cleanDimensions =
+    document.getElementById("cleanDimensions");
+
+const originalSize =
+    document.getElementById("originalSize");
+
+const cleanSize =
+    document.getElementById("cleanSize");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const status =
+    document.getElementById("status");
+
+
+let selectedFile = null;
+let originalImage = null;
+let cleanBlob = null;
+let cleanURL = null;
+
+
+/* ================= YEAR ================= */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+/* ================= FILE PICKER ================= */
+
+fileInput.addEventListener(
+    "change",
+    function(event){
+
+        const file =
+            event.target.files[0];
+
+        if(file){
+            loadImage(file);
+        }
+
+    }
+);
+
+
+/* ================= DRAG ================= */
+
+uploadArea.addEventListener(
+    "dragover",
+    function(event){
+
+        event.preventDefault();
+
+        uploadArea.classList.add("drag");
+
+    }
+);
+
+
+uploadArea.addEventListener(
+    "dragleave",
+    function(){
+
+        uploadArea.classList.remove("drag");
+
+    }
+);
+
+
+uploadArea.addEventListener(
+    "drop",
+    function(event){
+
+        event.preventDefault();
+
+        uploadArea.classList.remove("drag");
+
+        const file =
+            event.dataTransfer.files[0];
+
+        if(file){
+            loadImage(file);
+        }
+
+    }
+);
+
+
+/* ================= LOAD IMAGE ================= */
+
+function loadImage(file){
+
+    if(!file.type.startsWith("image/")){
+
+        showStatus(
+            "❌ Please select a valid image."
+        );
+
+        return;
+    }
+
+    selectedFile = file;
+
+    const reader =
+        new FileReader();
+
+    reader.onload =
+        function(event){
+
+            originalPreview.src =
+                event.target.result;
+
+            originalImage =
+                new Image();
+
+            originalImage.onload =
+                function(){
+
+                    originalDimensions.textContent =
+                        `${originalImage.width} × ${originalImage.height}`;
+
+                    cleanDimensions.textContent =
+                        `${originalImage.width} × ${originalImage.height}`;
+
+                };
+
+            originalImage.src =
+                event.target.result;
+
+        };
+
+    reader.readAsDataURL(file);
+
+
+    originalSize.textContent =
+        formatBytes(file.size);
+
+    cleanSize.textContent =
+        "-";
+
+    cleanPreview.removeAttribute("src");
+
+    downloadBtn.style.display =
+        "none";
+
+    previewSection.style.display =
+        "block";
+
+    hideStatus();
+}
+
+
+/* ================= REMOVE METADATA ================= */
+
+removeBtn.addEventListener(
+    "click",
+    removeMetadata
+);
+
+
+function removeMetadata(){
+
+    if(!selectedFile || !originalImage){
+
+        showStatus(
+            "❌ Please select an image first."
+        );
+
+        return;
+    }
+
+    removeBtn.disabled = true;
+
+    showStatus(
+        `<span class="spinner"></span>
+         Removing metadata...`
+    );
+
+
+    setTimeout(function(){
+
+        try{
+
+            const canvas =
+                document.createElement("canvas");
+
+            canvas.width =
+                originalImage.naturalWidth;
+
+            canvas.height =
+                originalImage.naturalHeight;
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            /*
+             * JPEG does not support transparency.
+             * Use white background when converting
+             * a transparent image to JPEG.
+             */
+
+            const outputType =
+                getOutputType(selectedFile.type);
+
+
+            if(outputType === "image/jpeg"){
+
+                ctx.fillStyle =
+                    "#ffffff";
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            }
+
+
+            ctx.drawImage(
+                originalImage,
+                0,
+                0
+            );
+
+
+            /*
+             * Canvas re-encoding creates a new image
+             * without copying the original EXIF metadata.
+             */
+
+            canvas.toBlob(
+                function(blob){
+
+                    if(!blob){
+
+                        throw new Error(
+                            "Could not create clean image."
+                        );
+
+                    }
+
+                    cleanBlob =
+                        blob;
+
+
+                    if(cleanURL){
+
+                        URL.revokeObjectURL(
+                            cleanURL
+                        );
+
+                    }
+
+
+                    cleanURL =
+                        URL.createObjectURL(
+                            blob
+                        );
+
+
+                    cleanPreview.src =
+                        cleanURL;
+
+
+                    cleanDimensions.textContent =
+                        `${canvas.width} × ${canvas.height}`;
+
+
+                    cleanSize.textContent =
+                        formatBytes(blob.size);
+
+
+                    const extension =
+                        getExtension(outputType);
+
+
+                    const originalName =
+                        selectedFile.name
+                        .replace(/\.[^/.]+$/, "");
+
+
+                    downloadBtn.href =
+                        cleanURL;
+
+
+                    downloadBtn.download =
+                        `${originalName}-clean.${extension}`;
+
+
+                    downloadBtn.style.display =
+                        "inline-flex";
+
+
+                    removeBtn.disabled =
+                        false;
+
+
+                    showStatus(
+                        "✅ Metadata removed successfully."
+                    );
+
+                },
+                outputType,
+                getQuality(outputType)
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            removeBtn.disabled =
+                false;
+
+            showStatus(
+                "❌ Could not remove metadata. Please try another image."
+            );
+
+        }
+
+    },100);
+
+}
+
+
+/* ================= OUTPUT FORMAT ================= */
+
+/*
+ * PNG input stays PNG.
+ * WEBP input stays WEBP.
+ * JPEG input stays JPEG.
+ */
+
+function getOutputType(type){
+
+    if(type === "image/png"){
+        return "image/png";
+    }
+
+    if(type === "image/webp"){
+        return "image/webp";
+    }
+
+    return "image/jpeg";
+}
+
+
+/* ================= QUALITY ================= */
+
+function getQuality(type){
+
+    if(type === "image/png"){
+        return 1;
+    }
+
+    return .95;
+}
+
+
+/* ================= EXTENSION ================= */
+
+function getExtension(type){
+
+    if(type === "image/png"){
+        return "png";
+    }
+
+    if(type === "image/webp"){
+        return "webp";
+    }
+
+    return "jpg";
+}
+
+
+/* ================= FILE SIZE ================= */
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+    const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        bytes /
+        Math.pow(1024,index)
+    ).toFixed(
+        index === 0 ? 0 : 2
+    )
+    + " "
+    + units[index];
+
+}
+
+
+/* ================= STATUS ================= */
+
+function showStatus(message){
+
+    status.innerHTML =
+        message;
+
+    status.style.display =
+        "block";
+
+}
+
+
+function hideStatus(){
+
+    status.style.display =
+        "none";
+
+}
+
+
+/* ================= RESET ================= */
+
+resetBtn.addEventListener(
+    "click",
+    function(){
+
+        selectedFile = null;
+        originalImage = null;
+        cleanBlob = null;
+
+
+        if(cleanURL){
+
+            URL.revokeObjectURL(
+                cleanURL
+            );
+
+            cleanURL = null;
+
+        }
+
+
+        fileInput.value = "";
+
+
+        originalPreview.removeAttribute(
+            "src"
+        );
+
+        cleanPreview.removeAttribute(
+            "src"
+        );
+
+
+        originalDimensions.textContent =
+            "-";
+
+        cleanDimensions.textContent =
+            "-";
+
+        originalSize.textContent =
+            "-";
+
+        cleanSize.textContent =
+            "-";
+
+
+        previewSection.style.display =
+            "none";
+
+
+        downloadBtn.style.display =
+            "none";
+
+
+        removeBtn.disabled =
+            false;
+
+
+        hideStatus();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

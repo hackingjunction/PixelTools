@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Cropper — PixelTools</title>
+<meta name="description" content="Crop images online with PixelTools. Free browser-based image cropper with aspect ratios, zoom, rotation and download.">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    color:#f5f7ff;
+    background:
+        radial-gradient(circle at 8% 10%,rgba(105,85,255,.20),transparent 30%),
+        radial-gradient(circle at 92% 18%,rgba(0,220,255,.14),transparent 28%),
+        radial-gradient(circle at 50% 100%,rgba(255,0,180,.12),transparent 32%),
+        #101321;
+    overflow-x:hidden;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.bg{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(3px);
+    opacity:.38;
+    animation:float 12s ease-in-out infinite;
+}
+
+.orb1{
+    width:300px;
+    height:300px;
+    left:-120px;
+    top:100px;
+    background:linear-gradient(135deg,#705cff,#00dcff);
+}
+
+.orb2{
+    width:240px;
+    height:240px;
+    right:-90px;
+    top:350px;
+    background:linear-gradient(135deg,#ff00bd,#ff7600);
+    animation-delay:2s;
+}
+
+.orb3{
+    width:190px;
+    height:190px;
+    left:45%;
+    bottom:-90px;
+    background:linear-gradient(135deg,#00ffa6,#725cff);
+    animation-delay:4s;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(30px,-35px) scale(1.08);
+    }
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+    opacity:.11;
+    background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+    background-size:55px 55px;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    width:min(1180px,calc(100% - 30px));
+    margin:18px auto 0;
+    padding:14px 20px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:22px;
+    background:rgba(20,23,39,.80);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 15px 50px rgba(0,0,0,.25);
+}
+
+.logo{
+    text-decoration:none;
+    font-size:23px;
+    font-weight:950;
+    letter-spacing:-.8px;
+    background:
+        linear-gradient(
+            90deg,
+            #7d6cff,
+            #00eaff,
+            #ff42c7,
+            #7d6cff
+        );
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradient 6s linear infinite;
+}
+
+@keyframes gradient{
+    to{
+        background-position:300% center;
+    }
+}
+
+.home{
+    text-decoration:none;
+    color:#d5daea;
+    font-size:14px;
+    padding:9px 14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    transition:.25s;
+}
+
+.home:hover{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    text-align:center;
+    max-width:850px;
+    margin:65px auto 35px;
+    padding:0 20px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 15px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.11);
+    color:#b9c1da;
+    font-size:13px;
+    margin-bottom:20px;
+    animation:fadeUp .7s ease;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#00ffa6;
+    box-shadow:0 0 15px #00ffa6;
+}
+
+.hero h1{
+    font-size:clamp(43px,7vw,78px);
+    line-height:1;
+    letter-spacing:-4px;
+    font-weight:950;
+    margin-bottom:18px;
+    animation:fadeUp .8s ease;
+}
+
+.gradient-text{
+    background:
+        linear-gradient(
+            90deg,
+            #7d6cff,
+            #00eaff,
+            #00ffa6,
+            #ff3fc7,
+            #7d6cff
+        );
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradient 7s linear infinite;
+}
+
+.hero p{
+    max-width:680px;
+    margin:auto;
+    color:#aeb5cc;
+    font-size:17px;
+    line-height:1.7;
+    animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.container{
+    width:min(1150px,calc(100% - 28px));
+    margin:auto;
+    padding-bottom:80px;
+}
+
+.main-card{
+    background:rgba(22,25,43,.88);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:30px;
+    padding:25px;
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.upload{
+    min-height:220px;
+    border:2px dashed rgba(255,255,255,.16);
+    border-radius:24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    padding:25px;
+    background:rgba(255,255,255,.025);
+    transition:.3s;
+}
+
+.upload:hover,
+.upload.dragging{
+    border-color:#00dcff;
+    background:rgba(0,220,255,.055);
+    transform:translateY(-3px);
+}
+
+.upload-icon{
+    width:72px;
+    height:72px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:linear-gradient(135deg,#6b5cff,#00d9ff);
+    box-shadow:0 15px 35px rgba(0,200,255,.18);
+    margin-bottom:15px;
+    animation:iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+.upload h3{
+    font-size:20px;
+    margin-bottom:7px;
+}
+
+.upload p{
+    color:#8f97b0;
+    font-size:14px;
+}
+
+.upload small{
+    display:block;
+    margin-top:10px;
+    color:#656e89;
+}
+
+#fileInput{
+    display:none;
+}
+
+/* =========================
+   WORKSPACE
+========================= */
+
+.workspace{
+    display:grid;
+    grid-template-columns:1.35fr .85fr;
+    gap:22px;
+    margin-top:22px;
+}
+
+/* =========================
+   CROP AREA
+========================= */
+
+.crop-card{
+    min-height:540px;
+    background:#0b0f1a;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    overflow:hidden;
+}
+
+.crop-header{
+    height:52px;
+    padding:0 17px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.crop-header strong{
+    font-size:13px;
+}
+
+.crop-header span{
+    color:#00e6a0;
+    font-size:11px;
+}
+
+.crop-area{
+    height:488px;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        linear-gradient(45deg,#151a29 25%,transparent 25%),
+        linear-gradient(-45deg,#151a29 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#151a29 75%),
+        linear-gradient(-45deg,transparent 75%,#151a29 75%);
+    background-size:28px 28px;
+    background-position:0 0,0 14px,14px -14px,-14px 0;
+}
+
+#cropCanvas{
+    position:absolute;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+}
+
+#cropCanvas:active{
+    cursor:grabbing;
+}
+
+.crop-frame{
+    position:absolute;
+    border:2px solid #00e5ff;
+    box-shadow:
+        0 0 0 9999px rgba(0,0,0,.54),
+        0 0 25px rgba(0,220,255,.20);
+    pointer-events:none;
+    display:none;
+}
+
+.crop-frame::before,
+.crop-frame::after{
+    content:"";
+    position:absolute;
+    pointer-events:none;
+}
+
+.crop-frame::before{
+    left:33.333%;
+    top:0;
+    width:33.333%;
+    height:100%;
+    border-left:1px solid rgba(255,255,255,.35);
+    border-right:1px solid rgba(255,255,255,.35);
+}
+
+.crop-frame::after{
+    left:0;
+    top:33.333%;
+    width:100%;
+    height:33.333%;
+    border-top:1px solid rgba(255,255,255,.35);
+    border-bottom:1px solid rgba(255,255,255,.35);
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+}
+
+.control{
+    padding:16px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.025);
+}
+
+.control-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:11px;
+}
+
+.control-title label{
+    color:#dce1f0;
+    font-size:13px;
+    font-weight:750;
+}
+
+.value{
+    color:#00dcff;
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================
+   ASPECT BUTTONS
+========================= */
+
+.aspect-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.aspect{
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    color:#cbd2e5;
+    border-radius:11px;
+    padding:10px 5px;
+    font-size:11px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.aspect:hover,
+.aspect.active{
+    border-color:#00dcff;
+    background:rgba(0,220,255,.09);
+    color:#fff;
+}
+
+/* =========================
+   RANGE
+========================= */
+
+input[type="range"]{
+    width:100%;
+    accent-color:#00d9ff;
+    cursor:pointer;
+}
+
+.range-labels{
+    display:flex;
+    justify-content:space-between;
+    color:#5f6881;
+    font-size:10px;
+    margin-top:6px;
+}
+
+/* =========================
+   ROTATION BUTTONS
+========================= */
+
+.rotate-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.rotate-btn{
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    color:#dce2f2;
+    padding:11px;
+    border-radius:11px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.rotate-btn:hover{
+    border-color:#00dcff;
+    transform:translateY(-2px);
+}
+
+/* =========================
+   SELECT
+========================= */
+
+select{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    background:#111522;
+    color:#f4f6ff;
+    outline:none;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:22px;
+}
+
+.info-box{
+    padding:15px;
+    border-radius:16px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.info-box small{
+    display:block;
+    color:#69718a;
+    font-size:10px;
+    margin-bottom:6px;
+}
+
+.info-box strong{
+    font-size:13px;
+    word-break:break-word;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.btn{
+    flex:1;
+    padding:15px;
+    border-radius:15px;
+    border:0;
+    cursor:pointer;
+    color:#fff;
+    font-weight:850;
+    font-size:14px;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.crop-btn{
+    background:linear-gradient(100deg,#695cff,#00bde9);
+    box-shadow:0 12px 30px rgba(0,190,255,.13);
+}
+
+.download{
+    background:linear-gradient(100deg,#ff2fbc,#795cff);
+    display:none;
+}
+
+.reset{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+    min-height:24px;
+    text-align:center;
+    margin-top:14px;
+    color:#8c95ae;
+    font-size:13px;
+}
+
+.status.success{
+    color:#00efa3;
+}
+
+.status.error{
+    color:#ff6687;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+    padding:20px 20px 45px;
+    color:#707994;
+    font-size:13px;
+}
+
+footer a{
+    color:#aab2cb;
+    text-decoration:none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px){
+
+    .workspace{
+        grid-template-columns:1fr;
+    }
+
+    .crop-card{
+        min-height:450px;
+    }
+
+    .crop-area{
+        height:398px;
+    }
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        margin-top:12px;
+    }
+
+    .hero{
+        margin-top:50px;
+    }
+
+    .hero h1{
+        letter-spacing:-2.5px;
+    }
+
+    .main-card{
+        padding:15px;
+        border-radius:23px;
+    }
+
+    .crop-card{
+        min-height:390px;
+    }
+
+    .crop-area{
+        height:338px;
+    }
+
+    .info{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .upload{
+        min-height:205px;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid"></div>
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a
+        href="../index.html"
+        class="logo"
+    >
+        PixelTools
+    </a>
+
+    <a
+        href="../index.html"
+        class="home"
+    >
+        ← Home
+    </a>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        <span class="dot"></span>
+        100% Browser Based
+    </div>
+
+    <h1>
+        Image
+        <span class="gradient-text">
+            Cropper
+        </span>
+    </h1>
+
+    <p>
+        Crop your images exactly the way you want.
+        Choose an aspect ratio, zoom, rotate and
+        download the final image directly from your browser.
+    </p>
+
+</section>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+<div class="main-card">
+
+
+    <!-- UPLOAD -->
+
+    <div
+        class="upload"
+        id="upload"
+        tabindex="0"
+    >
+
+        <div class="upload-icon">
+            ✂️
+        </div>
+
+        <h3>
+            Drop your image here
+        </h3>
+
+        <p>
+            or click to choose an image
+        </p>
+
+        <small>
+            JPG • JPEG • PNG • WEBP
+        </small>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+    </div>
+
+
+    <!-- WORKSPACE -->
+
+    <div class="workspace">
+
+
+        <!-- CROP PREVIEW -->
+
+        <div class="crop-card">
+
+            <div class="crop-header">
+
+                <strong>
+                    Crop Preview
+                </strong>
+
+                <span id="cropStatus">
+                    Ready
+                </span>
+
+            </div>
+
+            <div
+                class="crop-area"
+                id="cropArea"
+            >
+
+                <div
+                    class="preview-placeholder"
+                    id="placeholder"
+                    style="color:#636c86;text-align:center;font-size:14px;"
+                >
+                    <div style="font-size:45px;margin-bottom:10px;">
+                        ✂️
+                    </div>
+
+                    Upload an image to start cropping
+                </div>
+
+                <canvas
+                    id="cropCanvas"
+                ></canvas>
+
+                <div
+                    class="crop-frame"
+                    id="cropFrame"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="controls">
+
+
+            <!-- ASPECT RATIO -->
+
+            <div class="control">
+
+                <div class="control-title">
+
+                    <label>
+                        Aspect Ratio
+                    </label>
+
+                    <span
+                        class="value"
+                        id="ratioValue"
+                    >
+                        Free
+                    </span>
+
+                </div>
+
+                <div class="aspect-grid">
+
+                    <button
+                        class="aspect active"
+                        data-ratio="free"
+                    >
+                        Free
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="1"
+                    >
+                        1 : 1
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="1.333333"
+                    >
+                        4 : 3
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="1.777777"
+                    >
+                        16 : 9
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="1.5"
+                    >
+                        3 : 2
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio=".75"
+                    >
+                        3 : 4
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio=".5625"
+                    >
+                        9 : 16
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="1.25"
+                    >
+                        5 : 4
+                    </button>
+
+                    <button
+                        class="aspect"
+                        data-ratio="2"
+                    >
+                        2 : 1
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ZOOM -->
+
+            <div class="control">
+
+                <div class="control-title">
+
+                    <label>
+                        Zoom
+                    </label>
+
+                    <span
+                        class="value"
+                        id="zoomValue"
+                    >
+                        100%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    id="zoom"
+                    min="50"
+                    max="300"
+                    value="100"
+                >
+
+                <div class="range-labels">
+                    <span>50%</span>
+                    <span>100%</span>
+                    <span>300%</span>
+                </div>
+
+            </div>
+
+
+            <!-- ROTATE -->
+
+            <div class="control">
+
+                <div class="control-title">
+
+                    <label>
+                        Rotate
+                    </label>
+
+                    <span
+                        class="value"
+                        id="rotationValue"
+                    >
+                        0°
+                    </span>
+
+                </div>
+
+                <div class="rotate-buttons">
+
+                    <button
+                        class="rotate-btn"
+                        id="rotateLeft"
+                    >
+                        ↶ Rotate Left
+                    </button>
+
+                    <button
+                        class="rotate-btn"
+                        id="rotateRight"
+                    >
+                        Rotate Right ↷
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OUTPUT -->
+
+            <div class="control">
+
+                <div class="control-title">
+
+                    <label>
+                        Output Format
+                    </label>
+
+                </div>
+
+                <select id="format">
+
+                    <option value="image/jpeg">
+                        JPG
+                    </option>
+
+                    <option value="image/png">
+                        PNG
+                    </option>
+
+                    <option value="image/webp">
+                        WEBP
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QUALITY -->
+
+            <div class="control">
+
+                <div class="control-title">
+
+                    <label>
+                        Quality
+                    </label>
+
+                    <span
+                        class="value"
+                        id="qualityValue"
+                    >
+                        90%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    id="quality"
+                    min="10"
+                    max="100"
+                    value="90"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="info">
+
+        <div class="info-box">
+
+            <small>
+                ORIGINAL
+            </small>
+
+            <strong id="originalDimensions">
+                —
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <small>
+                CROP SIZE
+            </small>
+
+            <strong id="cropDimensions">
+                —
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <small>
+                OUTPUT SIZE
+            </small>
+
+            <strong id="outputSize">
+                —
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+        <button
+            class="btn crop-btn"
+            id="cropBtn"
+            disabled
+        >
+            ✂️ Crop Image
+        </button>
+
+        <button
+            class="btn download"
+            id="downloadBtn"
+        >
+            ⬇ Download Cropped
+        </button>
+
+        <button
+            class="btn reset"
+            id="resetBtn"
+        >
+            ↻ Reset
+        </button>
+
+    </div>
+
+
+    <div
+        class="status"
+        id="status"
+    ></div>
+
+</div>
+
+</main>
+
+
+<footer>
+
+    © <span id="year"></span>
+    <a href="../index.html">
+        PixelTools
+    </a>
+    · Your image stays in your browser
+
+</footer>
+
+
+<script>
+"use strict";
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const upload =
+    document.getElementById("upload");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const cropArea =
+    document.getElementById("cropArea");
+
+const canvas =
+    document.getElementById("cropCanvas");
+
+const cropFrame =
+    document.getElementById("cropFrame");
+
+const placeholder =
+    document.getElementById("placeholder");
+
+const cropBtn =
+    document.getElementById("cropBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const status =
+    document.getElementById("status");
+
+const cropStatus =
+    document.getElementById("cropStatus");
+
+const zoom =
+    document.getElementById("zoom");
+
+const zoomValue =
+    document.getElementById("zoomValue");
+
+const quality =
+    document.getElementById("quality");
+
+const qualityValue =
+    document.getElementById("qualityValue");
+
+const format =
+    document.getElementById("format");
+
+const rotationValue =
+    document.getElementById("rotationValue");
+
+const ratioValue =
+    document.getElementById("ratioValue");
+
+const originalDimensions =
+    document.getElementById("originalDimensions");
+
+const cropDimensions =
+    document.getElementById("cropDimensions");
+
+const outputSize =
+    document.getElementById("outputSize");
+
+const rotateLeft =
+    document.getElementById("rotateLeft");
+
+const rotateRight =
+    document.getElementById("rotateRight");
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let image = null;
+let originalFile = null;
+
+let objectURL = null;
+let downloadURL = null;
+
+let outputBlob = null;
+
+let rotation = 0;
+
+let currentRatio = null;
+
+let zoomLevel = 1;
+
+
+/*
+   Crop position is represented
+   in image coordinates.
+*/
+
+let crop = {
+    x:0,
+    y:0,
+    width:0,
+    height:0
+};
+
+let dragging = false;
+
+let dragStart = {
+    x:0,
+    y:0
+};
+
+let cropStart = {
+    x:0,
+    y:0
+};
+
+
+/* =========================
+   YEAR
+========================= */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+/* =========================
+   STATUS
+========================= */
+
+function setStatus(
+    message,
+    type=""
+){
+
+    status.textContent =
+        message;
+
+    status.className =
+        "status " + type;
+}
+
+
+/* =========================
+   FORMAT BYTES
+========================= */
+
+function formatBytes(bytes){
+
+    if(!bytes){
+        return "0 B";
+    }
+
+    const units =
+        ["B","KB","MB","GB"];
+
+    const index =
+        Math.min(
+            Math.floor(
+                Math.log(bytes) /
+                Math.log(1024)
+            ),
+            units.length - 1
+        );
+
+    return (
+        bytes /
+        Math.pow(1024,index)
+    ).toFixed(
+        index === 0 ? 0 : 2
+    ) +
+    " " +
+    units[index];
+}
+
+
+/* =========================
+   LOAD IMAGE
+========================= */
+
+function loadImage(file){
+
+    if(!file){
+        return;
+    }
+
+    const allowed = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if(!allowed.includes(file.type)){
+
+        setStatus(
+            "Please choose a JPG, PNG or WEBP image.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(
+        file.size >
+        100 * 1024 * 1024
+    ){
+
+        setStatus(
+            "Please choose an image smaller than 100 MB.",
+            "error"
+        );
+
+        return;
+    }
+
+    originalFile =
+        file;
+
+    if(objectURL){
+        URL.revokeObjectURL(objectURL);
+    }
+
+    objectURL =
+        URL.createObjectURL(file);
+
+    const img =
+        new Image();
+
+    img.onload =
+        function(){
+
+            image =
+                img;
+
+            rotation = 0;
+            zoomLevel = 1;
+            currentRatio = null;
+
+            zoom.value = 100;
+            zoomValue.textContent = "100%";
+
+            rotationValue.textContent =
+                "0°";
+
+            ratioValue.textContent =
+                "Free";
+
+            originalDimensions.textContent =
+                img.naturalWidth +
+                " × " +
+                img.naturalHeight;
+
+            cropBtn.disabled =
+                false;
+
+            placeholder.style.display =
+                "none";
+
+            cropFrame.style.display =
+                "block";
+
+            outputBlob =
+                null;
+
+            outputSize.textContent =
+                "—";
+
+            downloadBtn.style.display =
+                "none";
+
+            /*
+               Start with crop covering
+               most of the image.
+            */
+
+            initializeCrop();
+
+            render();
+
+            cropStatus.textContent =
+                "Ready";
+
+            setStatus(
+                "Image loaded. Drag the image to position it.",
+                "success"
+            );
+        };
+
+    img.onerror =
+        function(){
+
+            setStatus(
+                "Unable to read this image.",
+                "error"
+            );
+        };
+
+    img.src =
+        objectURL;
+}
+
+
+/* =========================
+   INITIAL CROP
+========================= */
+
+function initializeCrop(){
+
+    if(!image){
+        return;
+    }
+
+    const w =
+        image.naturalWidth;
+
+    const h =
+        image.naturalHeight;
+
+    let cropWidth;
+    let cropHeight;
+
+    if(currentRatio){
+
+        if(w / h >= currentRatio){
+
+            cropHeight =
+                h * .82;
+
+            cropWidth =
+                cropHeight * currentRatio;
+
+        }else{
+
+            cropWidth =
+                w * .82;
+
+            cropHeight =
+                cropWidth / currentRatio;
+        }
+
+    }else{
+
+        cropWidth =
+            w * .82;
+
+        cropHeight =
+            h * .82;
+    }
+
+    cropWidth =
+        Math.min(
+            cropWidth,
+            w
+        );
+
+    cropHeight =
+        Math.min(
+            cropHeight,
+            h
+        );
+
+    crop.x =
+        (w - cropWidth) / 2;
+
+    crop.y =
+        (h - cropHeight) / 2;
+
+    crop.width =
+        cropWidth;
+
+    crop.height =
+        cropHeight;
+}
+
+
+/* =========================
+   GET ROTATED SIZE
+========================= */
+
+function getRotatedDimensions(){
+
+    if(!image){
+        return {
+            width:0,
+            height:0
+        };
+    }
+
+    const angle =
+        ((rotation % 360) + 360) % 360;
+
+    if(
+        angle === 90 ||
+        angle === 270
+    ){
+
+        return {
+            width:image.naturalHeight,
+            height:image.naturalWidth
+        };
+    }
+
+    return {
+        width:image.naturalWidth,
+        height:image.naturalHeight
+    };
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+    if(!image){
+        return;
+    }
+
+    const areaWidth =
+        cropArea.clientWidth;
+
+    const areaHeight =
+        cropArea.clientHeight;
+
+    const rotated =
+        getRotatedDimensions();
+
+    const imageRatio =
+        rotated.width /
+        rotated.height;
+
+    let displayWidth =
+        areaWidth * .82;
+
+    let displayHeight =
+        displayWidth /
+        imageRatio;
+
+    if(displayHeight > areaHeight * .82){
+
+        displayHeight =
+            areaHeight * .82;
+
+        displayWidth =
+            displayHeight *
+            imageRatio;
+    }
+
+    displayWidth *=
+        zoomLevel;
+
+    displayHeight *=
+        zoomLevel;
+
+    /*
+       Keep the canvas large enough
+       to show the image but avoid
+       extreme browser sizes.
+    */
+
+    displayWidth =
+        Math.max(
+            1,
+            Math.min(
+                displayWidth,
+                5000
+            )
+        );
+
+    displayHeight =
+        Math.max(
+            1,
+            Math.min(
+                displayHeight,
+                5000
+            )
+        );
+
+    canvas.width =
+        Math.round(displayWidth);
+
+    canvas.height =
+        Math.round(displayHeight);
+
+    canvas.style.width =
+        displayWidth + "px";
+
+    canvas.style.height =
+        displayHeight + "px";
+
+    /*
+       Center canvas.
+    */
+
+    canvas.style.left =
+        "50%";
+
+    canvas.style.top =
+        "50%";
+
+    canvas.style.transform =
+        "translate(-50%,-50%)";
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.save();
+
+    ctx.translate(
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+    ctx.rotate(
+        rotation *
+        Math.PI /
+        180
+    );
+
+    /*
+       For 90/270 rotation,
+       width/height swap naturally.
+    */
+
+    ctx.drawImage(
+        image,
+        -image.naturalWidth *
+        (
+            canvas.width /
+            getBaseDisplayWidth()
+        ) / 2,
+
+        -image.naturalHeight *
+        (
+            canvas.height /
+            getBaseDisplayHeight()
+        ) / 2,
+
+        image.naturalWidth *
+        (
+            canvas.width /
+            getBaseDisplayWidth()
+        ),
+
+        image.naturalHeight *
+        (
+            canvas.height /
+            getBaseDisplayHeight()
+        )
+    );
+
+    ctx.restore();
+
+    updateCropFrame(
+        displayWidth,
+        displayHeight
+    );
+
+    updateInfo();
+}
+
+
+/*
+   These values represent the
+   canvas scale before rotation.
+*/
+
+function getBaseDisplayWidth(){
+
+    const rotated =
+        getRotatedDimensions();
+
+    if(
+        rotation % 180 !== 0
+    ){
+        return canvas.height;
+    }
+
+    return canvas.width;
+}
+
+function getBaseDisplayHeight(){
+
+    const rotated =
+        getRotatedDimensions();
+
+    if(
+        rotation % 180 !== 0
+    ){
+        return canvas.width;
+    }
+
+    return canvas.height;
+}
+
+
+/* =========================
+   CROP FRAME
+========================= */
+
+function updateCropFrame(
+    displayWidth,
+    displayHeight
+){
+
+    if(!image){
+        return;
+    }
+
+    /*
+       Convert image crop coordinates
+       into displayed coordinates.
+    */
+
+    const rotated =
+        getRotatedDimensions();
+
+    let cropDisplayWidth;
+    let cropDisplayHeight;
+
+    /*
+       Crop coordinates are maintained
+       relative to the displayed rotated
+       image dimensions.
+    */
+
+    const scaleX =
+        displayWidth /
+        rotated.width;
+
+    const scaleY =
+        displayHeight /
+        rotated.height;
+
+    cropDisplayWidth =
+        crop.width *
+        scaleX;
+
+    cropDisplayHeight =
+        crop.height *
+        scaleY;
+
+    /*
+       Position crop relative to canvas.
+    */
+
+    const left =
+        crop.x *
+        scaleX;
+
+    const top =
+        crop.y *
+        scaleY;
+
+    cropFrame.style.width =
+        Math.max(
+            20,
+            cropDisplayWidth
+        ) + "px";
+
+    cropFrame.style.height =
+        Math.max(
+            20,
+            cropDisplayHeight
+        ) + "px";
+
+    const canvasRect =
+        canvas.getBoundingClientRect();
+
+    const areaRect =
+        cropArea.getBoundingClientRect();
+
+    cropFrame.style.left =
+        (
+            canvasRect.left -
+            areaRect.left +
+            left
+        ) + "px";
+
+    cropFrame.style.top =
+        (
+            canvasRect.top -
+            areaRect.top +
+            top
+        ) + "px";
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+function updateInfo(){
+
+    if(!image){
+        return;
+    }
+
+    const rotated =
+        getRotatedDimensions();
+
+    cropDimensions.textContent =
+        Math.round(crop.width) +
+        " × " +
+        Math.round(crop.height);
+
+}
+
+
+/* =========================
+   ASPECT RATIO
+========================= */
+
+document
+    .querySelectorAll(".aspect")
+    .forEach(
+        function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    document
+                        .querySelectorAll(".aspect")
+                        .forEach(
+                            b =>
+                                b.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    const ratio =
+                        button.dataset.ratio;
+
+                    if(
+                        ratio === "free"
+                    ){
+
+                        currentRatio =
+                            null;
+
+                        ratioValue.textContent =
+                            "Free";
+
+                    }else{
+
+                        currentRatio =
+                            parseFloat(ratio);
+
+                        ratioValue.textContent =
+                            button.textContent.trim();
+
+                    }
+
+                    if(image){
+
+                        initializeCrop();
+                        render();
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================
+   ZOOM
+========================= */
+
+zoom.addEventListener(
+    "input",
+    function(){
+
+        zoomLevel =
+            parseInt(
+                zoom.value,
+                10
+            ) / 100;
+
+        zoomValue.textContent =
+            zoom.value + "%";
+
+        render();
+
+    }
+);
+
+
+/* =========================
+   ROTATION
+========================= */
+
+rotateLeft.addEventListener(
+    "click",
+    function(){
+
+        if(!image){
+            return;
+        }
+
+        rotation -= 90;
+
+        if(rotation < 0){
+            rotation += 360;
+        }
+
+        rotationValue.textContent =
+            rotation + "°";
+
+        /*
+           Reinitialize crop because
+           dimensions have changed.
+        */
+
+        initializeCrop();
+        render();
+
+    }
+);
+
+
+rotateRight.addEventListener(
+    "click",
+    function(){
+
+        if(!image){
+            return;
+        }
+
+        rotation += 90;
+
+        if(rotation >= 360){
+            rotation -= 360;
+        }
+
+        rotationValue.textContent =
+            rotation + "°";
+
+        initializeCrop();
+        render();
+
+    }
+);
+
+
+/* =========================
+   POINTER POSITION
+========================= */
+
+function pointerPosition(event){
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    let clientX;
+    let clientY;
+
+    if(event.touches){
+
+        clientX =
+            event.touches[0].clientX;
+
+        clientY =
+            event.touches[0].clientY;
+
+    }else{
+
+        clientX =
+            event.clientX;
+
+        clientY =
+            event.clientY;
+    }
+
+    return {
+        x:clientX - rect.left,
+        y:clientY - rect.top
+    };
+}
+
+
+/*
+   Dragging moves crop window.
+*/
+
+function startDrag(event){
+
+    if(!image){
+        return;
+    }
+
+    event.preventDefault();
+
+    dragging = true;
+
+    const point =
+        pointerPosition(event);
+
+    dragStart.x =
+        point.x;
+
+    dragStart.y =
+        point.y;
+
+    cropStart.x =
+        crop.x;
+
+    cropStart.y =
+        crop.y;
+
+    cropStatus.textContent =
+        "Moving";
+}
+
+
+function moveDrag(event){
+
+    if(
+        !dragging ||
+        !image
+    ){
+        return;
+    }
+
+    event.preventDefault();
+
+    const point =
+        pointerPosition(event);
+
+    /*
+       Current displayed scale.
+    */
+
+    const rotated =
+        getRotatedDimensions();
+
+    const scaleX =
+        canvas.width /
+        rotated.width;
+
+    const scaleY =
+        canvas.height /
+        rotated.height;
+
+    let dx =
+        (point.x - dragStart.x) /
+        scaleX;
+
+    let dy =
+        (point.y - dragStart.y) /
+        scaleY;
+
+    let newX =
+        cropStart.x + dx;
+
+    let newY =
+        cropStart.y + dy;
+
+    newX =
+        Math.max(
+            0,
+            Math.min(
+                rotated.width -
+                crop.width,
+                newX
+            )
+        );
+
+    newY =
+        Math.max(
+            0,
+            Math.min(
+                rotated.height -
+                crop.height,
+                newY
+            )
+        );
+
+    crop.x =
+        newX;
+
+    crop.y =
+        newY;
+
+    updateCropFrame(
+        canvas.width,
+        canvas.height
+    );
+
+    updateInfo();
+}
+
+
+function endDrag(){
+
+    dragging = false;
+
+    if(image){
+        cropStatus.textContent =
+            "Ready";
+    }
+}
+
+
+/* =========================
+   MOUSE EVENTS
+========================= */
+
+canvas.addEventListener(
+    "mousedown",
+    startDrag
+);
+
+window.addEventListener(
+    "mousemove",
+    moveDrag
+);
+
+window.addEventListener(
+    "mouseup",
+    endDrag
+);
+
+
+/* =========================
+   TOUCH EVENTS
+========================= */
+
+canvas.addEventListener(
+    "touchstart",
+    startDrag,
+    {passive:false}
+);
+
+window.addEventListener(
+    "touchmove",
+    moveDrag,
+    {passive:false}
+);
+
+window.addEventListener(
+    "touchend",
+    endDrag
+);
+
+
+/* =========================
+   QUALITY
+========================= */
+
+quality.addEventListener(
+    "input",
+    function(){
+
+        qualityValue.textContent =
+            quality.value + "%";
+
+    }
+);
+
+
+/* =========================
+   FORMAT
+========================= */
+
+format.addEventListener(
+    "change",
+    function(){
+
+        if(
+            format.value ===
+            "image/png"
+        ){
+
+            quality.disabled =
+                true;
+
+            qualityValue.textContent =
+                "PNG";
+
+        }else{
+
+            quality.disabled =
+                false;
+
+            qualityValue.textContent =
+                quality.value + "%";
+        }
+
+    }
+);
+
+
+/* =========================
+   CROP IMAGE
+========================= */
+
+cropBtn.addEventListener(
+    "click",
+    async function(){
+
+        if(!image){
+            return;
+        }
+
+        cropBtn.disabled =
+            true;
+
+        downloadBtn.style.display =
+            "none";
+
+        setStatus(
+            "Creating cropped image..."
+        );
+
+        cropStatus.textContent =
+            "Processing";
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    30
+                )
+        );
+
+        try{
+
+            /*
+               Work with rotated image
+               in an offscreen canvas.
+            */
+
+            const rotated =
+                getRotatedDimensions();
+
+            const workingCanvas =
+                document.createElement(
+                    "canvas"
+                );
+
+            workingCanvas.width =
+                rotated.width;
+
+            workingCanvas.height =
+                rotated.height;
+
+            const ctx =
+                workingCanvas.getContext(
+                    "2d"
+                );
+
+            ctx.save();
+
+            ctx.translate(
+                rotated.width / 2,
+                rotated.height / 2
+            );
+
+            ctx.rotate(
+                rotation *
+                Math.PI /
+                180
+            );
+
+            if(
+                rotation % 180 !== 0
+            ){
+
+                ctx.drawImage(
+                    image,
+                    -image.naturalWidth / 2,
+                    -image.naturalHeight / 2
+                );
+
+            }else{
+
+                ctx.drawImage(
+                    image,
+                    -image.naturalWidth / 2,
+                    -image.naturalHeight / 2
+                );
+            }
+
+            ctx.restore();
+
+
+            /*
+               Validate crop.
+            */
+
+            let sx =
+                Math.round(crop.x);
+
+            let sy =
+                Math.round(crop.y);
+
+            let sw =
+                Math.round(crop.width);
+
+            let sh =
+                Math.round(crop.height);
+
+            sx =
+                Math.max(
+                    0,
+                    Math.min(
+                        rotated.width - 1,
+                        sx
+                    )
+                );
+
+            sy =
+                Math.max(
+                    0,
+                    Math.min(
+                        rotated.height - 1,
+                        sy
+                    )
+                );
+
+            sw =
+                Math.max(
+                    1,
+                    Math.min(
+                        rotated.width - sx,
+                        sw
+                    )
+                );
+
+            sh =
+                Math.max(
+                    1,
+                    Math.min(
+                        rotated.height - sy,
+                        sh
+                    )
+                );
+
+
+            /*
+               Prevent huge output canvas.
+            */
+
+            const maxPixels =
+                60000000;
+
+            let outputWidth =
+                sw;
+
+            let outputHeight =
+                sh;
+
+            const pixels =
+                outputWidth *
+                outputHeight;
+
+            if(pixels > maxPixels){
+
+                const scale =
+                    Math.sqrt(
+                        maxPixels /
+                        pixels
+                    );
+
+                outputWidth =
+                    Math.floor(
+                        outputWidth *
+                        scale
+                    );
+
+                outputHeight =
+                    Math.floor(
+                        outputHeight *
+                        scale
+                    );
+            }
+
+
+            const outputCanvas =
+                document.createElement(
+                    "canvas"
+                );
+
+            outputCanvas.width =
+                outputWidth;
+
+            outputCanvas.height =
+                outputHeight;
+
+            const outputContext =
+                outputCanvas.getContext(
+                    "2d"
+                );
+
+            outputContext.imageSmoothingEnabled =
+                true;
+
+            outputContext.imageSmoothingQuality =
+                "high";
+
+            /*
+               JPG requires a background.
+            */
+
+            if(
+                format.value ===
+                "image/jpeg"
+            ){
+
+                outputContext.fillStyle =
+                    "#ffffff";
+
+                outputContext.fillRect(
+                    0,
+                    0,
+                    outputWidth,
+                    outputHeight
+                );
+            }
+
+            outputContext.drawImage(
+                workingCanvas,
+                sx,
+                sy,
+                sw,
+                sh,
+                0,
+                0,
+                outputWidth,
+                outputHeight
+            );
+
+
+            const q =
+                parseInt(
+                    quality.value,
+                    10
+                ) / 100;
+
+            outputBlob =
+                await canvasToBlob(
+                    outputCanvas,
+                    format.value,
+                    q
+                );
+
+            if(!outputBlob){
+                throw new Error(
+                    "Could not create output."
+                );
+            }
+
+            outputSize.textContent =
+                formatBytes(
+                    outputBlob.size
+                );
+
+            cropDimensions.textContent =
+                outputWidth +
+                " × " +
+                outputHeight;
+
+            downloadBtn.style.display =
+                "block";
+
+            cropStatus.textContent =
+                "Completed";
+
+            setStatus(
+                "Image cropped successfully.",
+                "success"
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            outputBlob =
+                null;
+
+            setStatus(
+                "Cropping failed. Please try a smaller image.",
+                "error"
+            );
+
+            cropStatus.textContent =
+                "Ready";
+
+        }finally{
+
+            cropBtn.disabled =
+                false;
+        }
+
+    }
+);
+
+
+/* =========================
+   CANVAS TO BLOB
+========================= */
+
+function canvasToBlob(
+    canvas,
+    type,
+    quality
+){
+
+    return new Promise(
+        function(resolve){
+
+            canvas.toBlob(
+                resolve,
+                type,
+                quality
+            );
+
+        }
+    );
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener(
+    "click",
+    function(){
+
+        if(!outputBlob){
+            return;
+        }
+
+        if(downloadURL){
+            URL.revokeObjectURL(
+                downloadURL
+            );
+        }
+
+        downloadURL =
+            URL.createObjectURL(
+                outputBlob
+            );
+
+        let extension =
+            "jpg";
+
+        if(
+            format.value ===
+            "image/png"
+        ){
+
+            extension =
+                "png";
+
+        }else if(
+            format.value ===
+            "image/webp"
+        ){
+
+            extension =
+                "webp";
+        }
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+        link.href =
+            downloadURL;
+
+        link.download =
+            "pixeltools-cropped." +
+            extension;
+
+        document.body.appendChild(
+            link
+        );
+
+        link.click();
+
+        link.remove();
+
+        setStatus(
+            "Download started.",
+            "success"
+        );
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function(){
+
+        if(objectURL){
+            URL.revokeObjectURL(
+                objectURL
+            );
+
+            objectURL = null;
+        }
+
+        if(downloadURL){
+            URL.revokeObjectURL(
+                downloadURL
+            );
+
+            downloadURL = null;
+        }
+
+        image = null;
+        originalFile = null;
+        outputBlob = null;
+
+        rotation = 0;
+        zoomLevel = 1;
+        currentRatio = null;
+
+        crop = {
+            x:0,
+            y:0,
+            width:0,
+            height:0
+        };
+
+        fileInput.value = "";
+
+        zoom.value = 100;
+        zoomValue.textContent =
+            "100%";
+
+        quality.value = 90;
+        qualityValue.textContent =
+            "90%";
+
+        format.value =
+            "image/jpeg";
+
+        quality.disabled =
+            false;
+
+        rotationValue.textContent =
+            "0°";
+
+        ratioValue.textContent =
+            "Free";
+
+        originalDimensions.textContent =
+            "—";
+
+        cropDimensions.textContent =
+            "—";
+
+        outputSize.textContent =
+            "—";
+
+        canvas.width = 1;
+        canvas.height = 1;
+
+        canvas.style.width =
+            "1px";
+
+        canvas.style.height =
+            "1px";
+
+        canvas.style.display =
+            "none";
+
+        cropFrame.style.display =
+            "none";
+
+        placeholder.style.display =
+            "block";
+
+        cropBtn.disabled =
+            true;
+
+        downloadBtn.style.display =
+            "none";
+
+        cropStatus.textContent =
+            "Ready";
+
+        document
+            .querySelectorAll(".aspect")
+            .forEach(
+                b =>
+                    b.classList.remove(
+                        "active"
+                    )
+            );
+
+        document
+            .querySelector(
+                '.aspect[data-ratio="free"]'
+            )
+            .classList.add(
+                "active"
+            );
+
+        setStatus(
+            "Ready for another image."
+        );
+    }
+);
+
+
+/* =========================
+   UPLOAD
+========================= */
+
+upload.addEventListener(
+    "click",
+    function(){
+
+        fileInput.click();
+
+    }
+);
+
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        if(fileInput.files.length){
+
+            loadImage(
+                fileInput.files[0]
+            );
+        }
+    }
+);
+
+
+/* =========================
+   DRAG & DROP
+========================= */
+
+[
+    "dragenter",
+    "dragover"
+].forEach(
+    function(eventName){
+
+        upload.addEventListener(
+            eventName,
+            function(event){
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                upload.classList.add(
+                    "dragging"
+                );
+            }
+        );
+
+    }
+);
+
+
+[
+    "dragleave",
+    "drop"
+].forEach(
+    function(eventName){
+
+        upload.addEventListener(
+            eventName,
+            function(event){
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                upload.classList.remove(
+                    "dragging"
+                );
+            }
+        );
+
+    }
+);
+
+
+upload.addEventListener(
+    "drop",
+    function(event){
+
+        const files =
+            event.dataTransfer.files;
+
+        if(files.length){
+
+            loadImage(
+                files[0]
+            );
+        }
+    }
+);
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+upload.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter" ||
+            event.key === " "
+        ){
+
+            event.preventDefault();
+
+            fileInput.click();
+        }
+    }
+);
+
+
+/* =========================
+   WINDOW RESIZE
+========================= */
+
+window.addEventListener(
+    "resize",
+    function(){
+
+        if(image){
+            render();
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>

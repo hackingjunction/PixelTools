@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Resizer — PixelTools</title>
+<meta name="description" content="Resize JPG, PNG and WEBP images online for free with PixelTools.">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    color:#f5f7ff;
+    background:
+        radial-gradient(circle at 10% 15%,rgba(91,76,255,.18),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(0,220,255,.13),transparent 28%),
+        radial-gradient(circle at 50% 90%,rgba(255,0,170,.10),transparent 30%),
+        #101321;
+    overflow-x:hidden;
+}
+
+/* ---------------- BACKGROUND ---------------- */
+
+.bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-5;
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:.42;
+    animation:float 12s ease-in-out infinite;
+}
+
+.orb1{
+    width:280px;
+    height:280px;
+    left:-100px;
+    top:100px;
+    background:linear-gradient(135deg,#6d5cff,#00d9ff);
+}
+
+.orb2{
+    width:220px;
+    height:220px;
+    right:-70px;
+    top:320px;
+    background:linear-gradient(135deg,#ff00b8,#ff6b00);
+    animation-delay:2s;
+}
+
+.orb3{
+    width:180px;
+    height:180px;
+    left:45%;
+    bottom:-80px;
+    background:linear-gradient(135deg,#00ff9d,#6d5cff);
+    animation-delay:4s;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translate3d(0,0,0) scale(1);
+    }
+    50%{
+        transform:translate3d(30px,-35px,0) scale(1.08);
+    }
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+    opacity:.13;
+    background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+    background-size:55px 55px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+/* ---------------- NAVBAR ---------------- */
+
+.navbar{
+    width:min(1180px,calc(100% - 30px));
+    margin:18px auto 0;
+    padding:14px 20px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:22px;
+    background:rgba(20,23,39,.78);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+    z-index:10;
+    box-shadow:0 15px 50px rgba(0,0,0,.25);
+}
+
+.logo{
+    text-decoration:none;
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:-.7px;
+    background:linear-gradient(90deg,#7d6cff,#00eaff,#ff43c7);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradientMove 5s linear infinite;
+}
+
+@keyframes gradientMove{
+    to{
+        background-position:200% center;
+    }
+}
+
+.nav-links{
+    display:flex;
+    gap:8px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#cdd2e7;
+    padding:9px 14px;
+    border-radius:12px;
+    font-size:14px;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:#fff;
+    background:rgba(255,255,255,.08);
+}
+
+.nav-home{
+    border:1px solid rgba(255,255,255,.12);
+}
+
+/* ---------------- HERO ---------------- */
+
+.hero{
+    text-align:center;
+    max-width:850px;
+    margin:70px auto 35px;
+    padding:0 20px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 15px;
+    border-radius:999px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.12);
+    color:#b9c1dd;
+    font-size:13px;
+    margin-bottom:20px;
+    animation:fadeUp .7s ease both;
+}
+
+.badge span{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#00ffa6;
+    box-shadow:0 0 15px #00ffa6;
+}
+
+.hero h1{
+    font-size:clamp(42px,7vw,76px);
+    line-height:1;
+    font-weight:950;
+    letter-spacing:-4px;
+    margin-bottom:18px;
+    animation:fadeUp .8s ease both;
+}
+
+.gradient-text{
+    background:linear-gradient(
+        90deg,
+        #7e6cff,
+        #00eaff,
+        #00ffa6,
+        #ff3ec8,
+        #7e6cff
+    );
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradientMove 7s linear infinite;
+}
+
+.hero p{
+    color:#aeb5cc;
+    font-size:17px;
+    line-height:1.7;
+    max-width:650px;
+    margin:auto;
+    animation:fadeUp 1s ease both;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ---------------- MAIN TOOL ---------------- */
+
+.tool-wrap{
+    width:min(1120px,calc(100% - 28px));
+    margin:35px auto 80px;
+}
+
+.tool-card{
+    position:relative;
+    background:rgba(22,25,43,.86);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:30px;
+    padding:25px;
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    overflow:hidden;
+}
+
+.tool-card::before{
+    content:"";
+    position:absolute;
+    width:280px;
+    height:280px;
+    right:-120px;
+    top:-120px;
+    border-radius:50%;
+    background:radial-gradient(circle,#00d9ff25,transparent 70%);
+    pointer-events:none;
+}
+
+.tool-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+/* ---------------- UPLOAD ---------------- */
+
+.upload-box{
+    min-height:310px;
+    border:2px dashed rgba(255,255,255,.16);
+    border-radius:24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:30px;
+    cursor:pointer;
+    background:rgba(255,255,255,.025);
+    transition:.3s;
+}
+
+.upload-box:hover,
+.upload-box.dragging{
+    border-color:#00dcff;
+    background:rgba(0,220,255,.06);
+    transform:translateY(-3px);
+}
+
+.upload-icon{
+    width:75px;
+    height:75px;
+    border-radius:23px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    margin-bottom:18px;
+    background:linear-gradient(135deg,#675cff,#00d9ff);
+    box-shadow:
+        0 15px 35px rgba(0,200,255,.18);
+    animation:iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat{
+    0%,100%{transform:translateY(0) rotate(0);}
+    50%{transform:translateY(-8px) rotate(2deg);}
+}
+
+.upload-box h3{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.upload-box p{
+    color:#9299b2;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.file-types{
+    margin-top:12px;
+    color:#737b98;
+    font-size:12px;
+}
+
+#fileInput{
+    display:none;
+}
+
+/* ---------------- PREVIEW ---------------- */
+
+.preview-area{
+    min-height:310px;
+    border-radius:24px;
+    background:#0c0f1b;
+    border:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+}
+
+.preview-placeholder{
+    color:#666e87;
+    text-align:center;
+    font-size:14px;
+    padding:30px;
+}
+
+.preview-placeholder div{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+#previewCanvas{
+    max-width:100%;
+    max-height:350px;
+    display:none;
+    object-fit:contain;
+}
+
+/* ---------------- CONTROLS ---------------- */
+
+.controls{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.control-box{
+    padding:18px;
+    border-radius:19px;
+    border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.025);
+}
+
+.control-box.full{
+    grid-column:1/-1;
+}
+
+.control-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.control-title label{
+    font-size:14px;
+    color:#dce1f2;
+    font-weight:700;
+}
+
+.control-title span{
+    color:#00dcff;
+    font-weight:800;
+    font-size:13px;
+}
+
+input[type="number"],
+select{
+    width:100%;
+    padding:13px 14px;
+    color:#f5f7ff;
+    background:#111522;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:13px;
+    outline:none;
+    font-size:14px;
+    transition:.2s;
+}
+
+input[type="number"]:focus,
+select:focus{
+    border-color:#00d9ff;
+    box-shadow:0 0 0 3px rgba(0,217,255,.08);
+}
+
+select option{
+    background:#151827;
+}
+
+.dimensions{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:end;
+    gap:12px;
+}
+
+.dimension-symbol{
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#737b98;
+    font-size:20px;
+}
+
+/* ---------------- SWITCH ---------------- */
+
+.lock-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:15px;
+    color:#9da5bd;
+    font-size:13px;
+}
+
+.switch{
+    width:46px;
+    height:25px;
+    position:relative;
+    display:inline-block;
+}
+
+.switch input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+    cursor:pointer;
+    background:#34394b;
+    border-radius:30px;
+    transition:.3s;
+}
+
+.slider::before{
+    content:"";
+    position:absolute;
+    width:19px;
+    height:19px;
+    left:3px;
+    top:3px;
+    border-radius:50%;
+    background:#fff;
+    transition:.3s;
+}
+
+.switch input:checked + .slider{
+    background:linear-gradient(90deg,#6b5cff,#00d9ff);
+}
+
+.switch input:checked + .slider::before{
+    transform:translateX(21px);
+}
+
+/* ---------------- RANGE ---------------- */
+
+input[type="range"]{
+    width:100%;
+    accent-color:#00d9ff;
+    cursor:pointer;
+}
+
+/* ---------------- PRESETS ---------------- */
+
+.presets{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.preset{
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    color:#cbd1e4;
+    border-radius:11px;
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:12px;
+    transition:.2s;
+}
+
+.preset:hover{
+    border-color:#00d9ff;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/* ---------------- INFO ---------------- */
+
+.info-row{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.info{
+    padding:15px;
+    border-radius:16px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.info small{
+    display:block;
+    color:#747d98;
+    font-size:11px;
+    margin-bottom:6px;
+}
+
+.info strong{
+    font-size:14px;
+    color:#e8ebf6;
+    word-break:break-word;
+}
+
+/* ---------------- BUTTONS ---------------- */
+
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:22px;
+}
+
+.btn{
+    flex:1;
+    border:0;
+    padding:15px 20px;
+    border-radius:15px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:800;
+    color:#fff;
+    transition:.25s;
+    position:relative;
+    overflow:hidden;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn:active{
+    transform:translateY(0);
+}
+
+.btn-primary{
+    background:linear-gradient(100deg,#675cff,#00bde9);
+    box-shadow:0 12px 30px rgba(0,190,255,.18);
+}
+
+.btn-download{
+    background:linear-gradient(100deg,#ff2ebd,#7b5cff);
+    display:none;
+}
+
+.btn-reset{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* ---------------- STATUS ---------------- */
+
+.status{
+    margin-top:16px;
+    min-height:24px;
+    text-align:center;
+    color:#8f98b3;
+    font-size:13px;
+}
+
+.status.success{
+    color:#00efa3;
+}
+
+.status.error{
+    color:#ff6b8a;
+}
+
+/* ---------------- FOOTER ---------------- */
+
+footer{
+    text-align:center;
+    padding:30px 20px 45px;
+    color:#737b95;
+    font-size:13px;
+}
+
+footer a{
+    color:#aab2cb;
+    text-decoration:none;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:800px){
+
+    .navbar{
+        padding:13px 15px;
+    }
+
+    .nav-links a:not(.nav-home){
+        display:none;
+    }
+
+    .hero{
+        margin-top:55px;
+    }
+
+    .hero h1{
+        letter-spacing:-2.5px;
+    }
+
+    .tool-card{
+        padding:16px;
+        border-radius:23px;
+    }
+
+    .tool-grid{
+        grid-template-columns:1fr;
+    }
+
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .control-box.full{
+        grid-column:auto;
+    }
+
+    .info-row{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+}
+
+@media(max-width:480px){
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .upload-box{
+        min-height:250px;
+        padding:20px;
+    }
+
+    .preview-area{
+        min-height:250px;
+    }
+
+    .dimensions{
+        grid-template-columns:1fr;
+    }
+
+    .dimension-symbol{
+        display:none;
+    }
+
+    .info-row{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="../index.html" class="logo">PixelTools</a>
+
+    <div class="nav-links">
+        <a href="../index.html" class="nav-home">← Home</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="badge">
+        <span></span>
+        100% Browser Based
+    </div>
+
+    <h1>
+        Image <span class="gradient-text">Resizer</span>
+    </h1>
+
+    <p>
+        Resize your JPG, PNG and WEBP images quickly.
+        Change width, height, percentage and output format —
+        everything happens directly in your browser.
+    </p>
+
+</section>
+
+<!-- TOOL -->
+<main class="tool-wrap">
+
+    <div class="tool-card">
+
+        <div class="tool-grid">
+
+            <!-- UPLOAD -->
+            <div
+                class="upload-box"
+                id="uploadBox"
+            >
+
+                <div class="upload-icon">🖼️</div>
+
+                <h3>Drop your image here</h3>
+
+                <p>
+                    or click to choose an image
+                </p>
+
+                <div class="file-types">
+                    JPG • JPEG • PNG • WEBP
+                </div>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="preview-area">
+
+                <div
+                    class="preview-placeholder"
+                    id="previewPlaceholder"
+                >
+                    <div>✨</div>
+                    Your resized image preview
+                    will appear here
+                </div>
+
+                <canvas id="previewCanvas"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls">
+
+            <!-- WIDTH / HEIGHT -->
+            <div class="control-box">
+
+                <div class="control-title">
+                    <label>Dimensions</label>
+                    <span id="dimensionText">—</span>
+                </div>
+
+                <div class="dimensions">
+
+                    <div>
+                        <label
+                            style="display:block;color:#747d98;font-size:11px;margin-bottom:6px;"
+                        >
+                            WIDTH
+                        </label>
+
+                        <input
+                            type="number"
+                            id="widthInput"
+                            min="1"
+                            max="10000"
+                            placeholder="Width"
+                        >
+                    </div>
+
+                    <div class="dimension-symbol">
+                        ×
+                    </div>
+
+                    <div>
+                        <label
+                            style="display:block;color:#747d98;font-size:11px;margin-bottom:6px;"
+                        >
+                            HEIGHT
+                        </label>
+
+                        <input
+                            type="number"
+                            id="heightInput"
+                            min="1"
+                            max="10000"
+                            placeholder="Height"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="lock-row">
+
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            id="lockRatio"
+                            checked
+                        >
+                        <span class="slider"></span>
+                    </label>
+
+                    <span>
+                        Lock aspect ratio
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- PERCENTAGE -->
+            <div class="control-box">
+
+                <div class="control-title">
+                    <label>Resize by percentage</label>
+                    <span id="percentValue">100%</span>
+                </div>
+
+                <input
+                    type="range"
+                    id="percentSlider"
+                    min="10"
+                    max="300"
+                    value="100"
+                >
+
+                <div
+                    style="display:flex;justify-content:space-between;color:#626a83;font-size:11px;margin-top:8px;"
+                >
+                    <span>10%</span>
+                    <span>100%</span>
+                    <span>300%</span>
+                </div>
+
+            </div>
+
+            <!-- PRESETS -->
+            <div class="control-box full">
+
+                <div class="control-title">
+                    <label>Quick sizes</label>
+                    <span>Presets</span>
+                </div>
+
+                <div class="presets">
+
+                    <button class="preset" data-w="320" data-h="240">
+                        320 × 240
+                    </button>
+
+                    <button class="preset" data-w="640" data-h="480">
+                        640 × 480
+                    </button>
+
+                    <button class="preset" data-w="800" data-h="600">
+                        800 × 600
+                    </button>
+
+                    <button class="preset" data-w="1280" data-h="720">
+                        1280 × 720
+                    </button>
+
+                    <button class="preset" data-w="1920" data-h="1080">
+                        1920 × 1080
+                    </button>
+
+                    <button class="preset" data-w="1080" data-h="1080">
+                        1080 × 1080
+                    </button>
+
+                    <button class="preset" data-w="1080" data-h="1350">
+                        1080 × 1350
+                    </button>
+
+                    <button class="preset" data-w="1080" data-h="1920">
+                        1080 × 1920
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- OUTPUT FORMAT -->
+            <div class="control-box">
+
+                <div class="control-title">
+                    <label>Output format</label>
+                </div>
+
+                <select id="formatSelect">
+
+                    <option value="image/jpeg">
+                        JPG
+                    </option>
+
+                    <option value="image/png">
+                        PNG
+                    </option>
+
+                    <option value="image/webp">
+                        WEBP
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- QUALITY -->
+            <div class="control-box">
+
+                <div class="control-title">
+                    <label>Quality</label>
+                    <span id="qualityValue">90%</span>
+                </div>
+
+                <input
+                    type="range"
+                    id="qualitySlider"
+                    min="10"
+                    max="100"
+                    value="90"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- INFO -->
+        <div class="info-row">
+
+            <div class="info">
+                <small>ORIGINAL SIZE</small>
+                <strong id="originalSize">—</strong>
+            </div>
+
+            <div class="info">
+                <small>ORIGINAL DIMENSIONS</small>
+                <strong id="originalDimensions">—</strong>
+            </div>
+
+            <div class="info">
+                <small>NEW DIMENSIONS</small>
+                <strong id="newDimensions">—</strong>
+            </div>
+
+            <div class="info">
+                <small>OUTPUT SIZE</small>
+                <strong id="outputSize">—</strong>
+            </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="actions">
+
+            <button
+                class="btn btn-primary"
+                id="resizeBtn"
+                disabled
+            >
+                ✨ Resize Image
+            </button>
+
+            <button
+                class="btn btn-download"
+                id="downloadBtn"
+            >
+                ⬇ Download Image
+            </button>
+
+            <button
+                class="btn btn-reset"
+                id="resetBtn"
+            >
+                ↻ Reset
+            </button>
+
+        </div>
+
+        <div
+            class="status"
+            id="status"
+        ></div>
+
+    </div>
+
+</main>
+
+<footer>
+    © <span id="year"></span>
+    <a href="../index.html">PixelTools</a>
+    · Your files stay in your browser
+</footer>
+
+<script>
+"use strict";
+
+/* ================================
+   ELEMENTS
+================================ */
+
+const uploadBox = document.getElementById("uploadBox");
+const fileInput = document.getElementById("fileInput");
+
+const previewCanvas = document.getElementById("previewCanvas");
+const previewPlaceholder =
+    document.getElementById("previewPlaceholder");
+
+const widthInput =
+    document.getElementById("widthInput");
+
+const heightInput =
+    document.getElementById("heightInput");
+
+const lockRatio =
+    document.getElementById("lockRatio");
+
+const percentSlider =
+    document.getElementById("percentSlider");
+
+const percentValue =
+    document.getElementById("percentValue");
+
+const formatSelect =
+    document.getElementById("formatSelect");
+
+const qualitySlider =
+    document.getElementById("qualitySlider");
+
+const qualityValue =
+    document.getElementById("qualityValue");
+
+const resizeBtn =
+    document.getElementById("resizeBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const status =
+    document.getElementById("status");
+
+const originalSize =
+    document.getElementById("originalSize");
+
+const originalDimensions =
+    document.getElementById("originalDimensions");
+
+const newDimensions =
+    document.getElementById("newDimensions");
+
+const outputSize =
+    document.getElementById("outputSize");
+
+const dimensionText =
+    document.getElementById("dimensionText");
+
+const year =
+    document.getElementById("year");
+
+
+/* ================================
+   VARIABLES
+================================ */
+
+let originalImage = null;
+let originalFile = null;
+let outputBlob = null;
+
+let originalWidth = 0;
+let originalHeight = 0;
+
+let objectURL = null;
+let downloadURL = null;
+
+
+/* ================================
+   YEAR
+================================ */
+
+year.textContent = new Date().getFullYear();
+
+
+/* ================================
+   FILE SIZE
+================================ */
+
+function formatBytes(bytes){
+
+    if(!bytes || bytes <= 0){
+        return "0 B";
+    }
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+    const index =
+        Math.floor(
+            Math.log(bytes) / Math.log(1024)
+        );
+
+    const safeIndex =
+        Math.min(index, units.length - 1);
+
+    return (
+        bytes /
+        Math.pow(1024, safeIndex)
+    ).toFixed(
+        safeIndex === 0 ? 0 : 2
+    ) + " " +
+    units[safeIndex];
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+function showStatus(message,type=""){
+
+    status.textContent = message;
+
+    status.className =
+        "status " + type;
+}
+
+
+/* ================================
+   LOAD IMAGE
+================================ */
+
+function loadImage(file){
+
+    if(!file){
+        return;
+    }
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if(!allowedTypes.includes(file.type)){
+
+        showStatus(
+            "Please select a JPG, PNG or WEBP image.",
+            "error"
+        );
+
+        return;
+    }
+
+    /*
+       Protect browser memory from extremely
+       large files.
+    */
+
+    if(file.size > 100 * 1024 * 1024){
+
+        showStatus(
+            "Please choose an image smaller than 100 MB.",
+            "error"
+        );
+
+        return;
+    }
+
+    originalFile = file;
+
+    if(objectURL){
+        URL.revokeObjectURL(objectURL);
+    }
+
+    objectURL = URL.createObjectURL(file);
+
+    const img = new Image();
+
+    img.onload = function(){
+
+        originalImage = img;
+
+        originalWidth = img.naturalWidth;
+        originalHeight = img.naturalHeight;
+
+        widthInput.value = originalWidth;
+        heightInput.value = originalHeight;
+
+        percentSlider.value = 100;
+        percentValue.textContent = "100%";
+
+        originalSize.textContent =
+            formatBytes(file.size);
+
+        originalDimensions.textContent =
+            originalWidth + " × " + originalHeight;
+
+        newDimensions.textContent =
+            originalWidth + " × " + originalHeight;
+
+        dimensionText.textContent =
+            originalWidth + " × " + originalHeight;
+
+        outputSize.textContent = "—";
+
+        previewPlaceholder.style.display = "none";
+        previewCanvas.style.display = "block";
+
+        resizeBtn.disabled = false;
+
+        outputBlob = null;
+
+        downloadBtn.style.display = "none";
+
+        drawPreview(
+            originalWidth,
+            originalHeight
+        );
+
+        showStatus(
+            "Image loaded successfully.",
+            "success"
+        );
+    };
+
+    img.onerror = function(){
+
+        showStatus(
+            "Unable to read this image.",
+            "error"
+        );
+    };
+
+    img.src = objectURL;
+}
+
+
+/* ================================
+   DRAW PREVIEW
+================================ */
+
+function drawPreview(width,height){
+
+    if(!originalImage){
+        return;
+    }
+
+    const maxPreviewWidth = 850;
+    const maxPreviewHeight = 450;
+
+    let scale = Math.min(
+        maxPreviewWidth / width,
+        maxPreviewHeight / height,
+        1
+    );
+
+    const displayWidth =
+        Math.max(1,Math.round(width * scale));
+
+    const displayHeight =
+        Math.max(1,Math.round(height * scale));
+
+    previewCanvas.width = displayWidth;
+    previewCanvas.height = displayHeight;
+
+    const ctx =
+        previewCanvas.getContext("2d");
+
+    ctx.clearRect(
+        0,
+        0,
+        displayWidth,
+        displayHeight
+    );
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+        originalImage,
+        0,
+        0,
+        displayWidth,
+        displayHeight
+    );
+}
+
+
+/* ================================
+   WIDTH CHANGE
+================================ */
+
+widthInput.addEventListener(
+    "input",
+    function(){
+
+        if(!originalImage){
+            return;
+        }
+
+        let width =
+            parseInt(widthInput.value,10);
+
+        if(!Number.isFinite(width)){
+            return;
+        }
+
+        width =
+            Math.max(
+                1,
+                Math.min(10000,width)
+            );
+
+        if(lockRatio.checked){
+
+            const ratio =
+                originalHeight /
+                originalWidth;
+
+            const height =
+                Math.round(width * ratio);
+
+            heightInput.value = height;
+        }
+
+        updateDimensionInfo();
+        updatePercentageFromDimensions();
+    }
+);
+
+
+/* ================================
+   HEIGHT CHANGE
+================================ */
+
+heightInput.addEventListener(
+    "input",
+    function(){
+
+        if(!originalImage){
+            return;
+        }
+
+        let height =
+            parseInt(heightInput.value,10);
+
+        if(!Number.isFinite(height)){
+            return;
+        }
+
+        height =
+            Math.max(
+                1,
+                Math.min(10000,height)
+            );
+
+        if(lockRatio.checked){
+
+            const ratio =
+                originalWidth /
+                originalHeight;
+
+            const width =
+                Math.round(height * ratio);
+
+            widthInput.value = width;
+        }
+
+        updateDimensionInfo();
+        updatePercentageFromDimensions();
+    }
+);
+
+
+/* ================================
+   UPDATE DIMENSIONS
+================================ */
+
+function updateDimensionInfo(){
+
+    const width =
+        parseInt(widthInput.value,10) || 0;
+
+    const height =
+        parseInt(heightInput.value,10) || 0;
+
+    newDimensions.textContent =
+        width + " × " + height;
+
+    dimensionText.textContent =
+        width + " × " + height;
+}
+
+
+/* ================================
+   PERCENTAGE
+================================ */
+
+percentSlider.addEventListener(
+    "input",
+    function(){
+
+        if(!originalImage){
+            return;
+        }
+
+        const percent =
+            parseInt(
+                percentSlider.value,
+                10
+            );
+
+        percentValue.textContent =
+            percent + "%";
+
+        const width =
+            Math.max(
+                1,
+                Math.round(
+                    originalWidth *
+                    percent /
+                    100
+                )
+            );
+
+        const height =
+            Math.max(
+                1,
+                Math.round(
+                    originalHeight *
+                    percent /
+                    100
+                )
+            );
+
+        widthInput.value = width;
+        heightInput.value = height;
+
+        updateDimensionInfo();
+    }
+);
+
+
+/* ================================
+   UPDATE PERCENT FROM DIMENSION
+================================ */
+
+function updatePercentageFromDimensions(){
+
+    if(!originalImage){
+        return;
+    }
+
+    const width =
+        parseInt(widthInput.value,10);
+
+    if(!width){
+        return;
+    }
+
+    let percent =
+        Math.round(
+            width /
+            originalWidth *
+            100
+        );
+
+    percent =
+        Math.max(
+            10,
+            Math.min(300,percent)
+        );
+
+    percentSlider.value = percent;
+    percentValue.textContent =
+        percent + "%";
+}
+
+
+/* ================================
+   QUALITY
+================================ */
+
+qualitySlider.addEventListener(
+    "input",
+    function(){
+
+        qualityValue.textContent =
+            qualitySlider.value + "%";
+    }
+);
+
+
+/* ================================
+   FORMAT
+================================ */
+
+formatSelect.addEventListener(
+    "change",
+    function(){
+
+        const isPNG =
+            formatSelect.value === "image/png";
+
+        qualitySlider.disabled = isPNG;
+
+        if(isPNG){
+
+            qualityValue.textContent =
+                "PNG";
+
+        }else{
+
+            qualityValue.textContent =
+                qualitySlider.value + "%";
+        }
+    }
+);
+
+
+/* ================================
+   PRESETS
+================================ */
+
+document
+    .querySelectorAll(".preset")
+    .forEach(function(button){
+
+        button.addEventListener(
+            "click",
+            function(){
+
+                if(!originalImage){
+
+                    showStatus(
+                        "Upload an image first.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+                const width =
+                    parseInt(
+                        button.dataset.w,
+                        10
+                    );
+
+                const height =
+                    parseInt(
+                        button.dataset.h,
+                        10
+                    );
+
+                /*
+                   Presets should use exact
+                   dimensions, so unlock ratio.
+                */
+
+                lockRatio.checked = false;
+
+                widthInput.value = width;
+                heightInput.value = height;
+
+                updateDimensionInfo();
+                updatePercentageFromDimensions();
+
+                showStatus(
+                    "Preset " +
+                    width +
+                    " × " +
+                    height +
+                    " selected."
+                );
+            }
+        );
+
+    });
+
+
+/* ================================
+   RESIZE
+================================ */
+
+resizeBtn.addEventListener(
+    "click",
+    async function(){
+
+        if(!originalImage){
+            return;
+        }
+
+        let width =
+            parseInt(widthInput.value,10);
+
+        let height =
+            parseInt(heightInput.value,10);
+
+        if(
+            !Number.isFinite(width) ||
+            !Number.isFinite(height) ||
+            width < 1 ||
+            height < 1
+        ){
+
+            showStatus(
+                "Please enter valid dimensions.",
+                "error"
+            );
+
+            return;
+        }
+
+        if(width > 10000 || height > 10000){
+
+            showStatus(
+                "Maximum dimension is 10,000 pixels.",
+                "error"
+            );
+
+            return;
+        }
+
+        /*
+           Prevent very large canvas allocations.
+        */
+
+        const pixels =
+            width * height;
+
+        if(pixels > 100000000){
+
+            showStatus(
+                "That size is too large for a browser canvas. Try smaller dimensions.",
+                "error"
+            );
+
+            return;
+        }
+
+        resizeBtn.disabled = true;
+        downloadBtn.style.display = "none";
+
+        showStatus(
+            "Resizing image..."
+        );
+
+        /*
+           Small delay lets browser update UI.
+        */
+
+        await new Promise(
+            resolve => setTimeout(resolve,30)
+        );
+
+        try{
+
+            const canvas =
+                document.createElement("canvas");
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx =
+                canvas.getContext(
+                    "2d",
+                    {alpha:true}
+                );
+
+            if(!ctx){
+                throw new Error(
+                    "Canvas is not supported."
+                );
+            }
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+
+            /*
+               PNG should have transparent
+               background.
+            */
+
+            if(
+                formatSelect.value ===
+                "image/png"
+            ){
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+            }else{
+
+                /*
+                   JPG does not support transparency.
+                   Use white background.
+                */
+
+                ctx.fillStyle = "#ffffff";
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    width,
+                    height
+                );
+            }
+
+            ctx.drawImage(
+                originalImage,
+                0,
+                0,
+                width,
+                height
+            );
+
+            const quality =
+                parseInt(
+                    qualitySlider.value,
+                    10
+                ) / 100;
+
+            outputBlob =
+                await canvasToBlob(
+                    canvas,
+                    formatSelect.value,
+                    quality
+                );
+
+            if(!outputBlob){
+                throw new Error(
+                    "Could not create output image."
+                );
+            }
+
+            /*
+               Display final preview.
+            */
+
+            const finalURL =
+                URL.createObjectURL(
+                    outputBlob
+                );
+
+            const finalImage =
+                new Image();
+
+            finalImage.onload =
+                function(){
+
+                    drawFinalPreview(
+                        finalImage,
+                        width,
+                        height
+                    );
+
+                    URL.revokeObjectURL(
+                        finalURL
+                    );
+                };
+
+            finalImage.src = finalURL;
+
+            outputSize.textContent =
+                formatBytes(
+                    outputBlob.size
+                );
+
+            newDimensions.textContent =
+                width + " × " + height;
+
+            dimensionText.textContent =
+                width + " × " + height;
+
+            downloadBtn.style.display =
+                "block";
+
+            showStatus(
+                "Image resized successfully.",
+                "success"
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            outputBlob = null;
+
+            showStatus(
+                "Resize failed. Please try smaller dimensions.",
+                "error"
+            );
+
+        }finally{
+
+            resizeBtn.disabled = false;
+        }
+
+    }
+);
+
+
+/* ================================
+   CANVAS TO BLOB
+================================ */
+
+function canvasToBlob(
+    canvas,
+    type,
+    quality
+){
+
+    return new Promise(
+        function(resolve){
+
+            canvas.toBlob(
+                resolve,
+                type,
+                quality
+            );
+
+        }
+    );
+}
+
+
+/* ================================
+   FINAL PREVIEW
+================================ */
+
+function drawFinalPreview(
+    image,
+    width,
+    height
+){
+
+    const maxWidth = 850;
+    const maxHeight = 450;
+
+    const scale =
+        Math.min(
+            maxWidth / width,
+            maxHeight / height,
+            1
+        );
+
+    const displayWidth =
+        Math.max(
+            1,
+            Math.round(width * scale)
+        );
+
+    const displayHeight =
+        Math.max(
+            1,
+            Math.round(height * scale)
+        );
+
+    previewCanvas.width =
+        displayWidth;
+
+    previewCanvas.height =
+        displayHeight;
+
+    const ctx =
+        previewCanvas.getContext("2d");
+
+    ctx.clearRect(
+        0,
+        0,
+        displayWidth,
+        displayHeight
+    );
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+        image,
+        0,
+        0,
+        displayWidth,
+        displayHeight
+    );
+}
+
+
+/* ================================
+   DOWNLOAD
+================================ */
+
+downloadBtn.addEventListener(
+    "click",
+    function(){
+
+        if(!outputBlob){
+            return;
+        }
+
+        if(downloadURL){
+            URL.revokeObjectURL(downloadURL);
+        }
+
+        downloadURL =
+            URL.createObjectURL(
+                outputBlob
+            );
+
+        let extension = "jpg";
+
+        if(
+            formatSelect.value ===
+            "image/png"
+        ){
+            extension = "png";
+        }
+
+        if(
+            formatSelect.value ===
+            "image/webp"
+        ){
+            extension = "webp";
+        }
+
+        const link =
+            document.createElement("a");
+
+        link.href = downloadURL;
+
+        link.download =
+            "pixeltools-resized." +
+            extension;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        showStatus(
+            "Download started.",
+            "success"
+        );
+    }
+);
+
+
+/* ================================
+   RESET
+================================ */
+
+resetBtn.addEventListener(
+    "click",
+    function(){
+
+        if(objectURL){
+            URL.revokeObjectURL(objectURL);
+            objectURL = null;
+        }
+
+        if(downloadURL){
+            URL.revokeObjectURL(downloadURL);
+            downloadURL = null;
+        }
+
+        originalImage = null;
+        originalFile = null;
+        outputBlob = null;
+
+        fileInput.value = "";
+
+        widthInput.value = "";
+        heightInput.value = "";
+
+        percentSlider.value = 100;
+        percentValue.textContent = "100%";
+
+        qualitySlider.value = 90;
+        qualityValue.textContent = "90%";
+
+        formatSelect.value = "image/jpeg";
+        qualitySlider.disabled = false;
+
+        lockRatio.checked = true;
+
+        previewCanvas.style.display = "none";
+
+        previewPlaceholder.style.display =
+            "block";
+
+        previewCanvas.width = 1;
+        previewCanvas.height = 1;
+
+        originalSize.textContent = "—";
+        originalDimensions.textContent = "—";
+        newDimensions.textContent = "—";
+        outputSize.textContent = "—";
+        dimensionText.textContent = "—";
+
+        resizeBtn.disabled = true;
+
+        downloadBtn.style.display =
+            "none";
+
+        showStatus(
+            "Ready for another image."
+        );
+    }
+);
+
+
+/* ================================
+   UPLOAD CLICK
+================================ */
+
+uploadBox.addEventListener(
+    "click",
+    function(){
+
+        fileInput.click();
+
+    }
+);
+
+
+/* ================================
+   FILE SELECT
+================================ */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        if(fileInput.files.length > 0){
+
+            loadImage(
+                fileInput.files[0]
+            );
+
+        }
+    }
+);
+
+
+/* ================================
+   DRAG & DROP
+================================ */
+
+[
+    "dragenter",
+    "dragover"
+].forEach(function(eventName){
+
+    uploadBox.addEventListener(
+        eventName,
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            uploadBox.classList.add(
+                "dragging"
+            );
+        }
+    );
+
+});
+
+
+[
+    "dragleave",
+    "drop"
+].forEach(function(eventName){
+
+    uploadBox.addEventListener(
+        eventName,
+        function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            uploadBox.classList.remove(
+                "dragging"
+            );
+        }
+    );
+
+});
+
+
+uploadBox.addEventListener(
+    "drop",
+    function(event){
+
+        const files =
+            event.dataTransfer.files;
+
+        if(files.length > 0){
+
+            loadImage(files[0]);
+
+        }
+    }
+);
+
+
+/* ================================
+   KEYBOARD ACCESSIBILITY
+================================ */
+
+uploadBox.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter" ||
+            event.key === " "
+        ){
+
+            event.preventDefault();
+
+            fileInput.click();
+        }
+    }
+);
+
+uploadBox.setAttribute(
+    "tabindex",
+    "0"
+);
+
+</script>
+
+</body>
+</html>

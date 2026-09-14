@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- =========================================================
+         SEO
+    ========================================================== -->
+
+    <title>
+        PixelTools — Free Online Image & PDF Tools
+    </title>
+<link rel="icon" type="image/webp" href="assets/favicon.webp">
+<link rel="apple-touch-icon" href="assets/favicon.webp">
+    <meta
+        name="description"
+        content="PixelTools provides free online tools to compress, resize, crop, convert, enhance and remove image backgrounds, plus compress, merge, split and edit PDFs and generate QR codes."
+    >
+
+    <meta
+        name="keywords"
+        content="free online tools, image compressor, image resizer, image converter, image cropper, background remover, image enhancer, PDF compressor, PDF merger, PDF splitter, PDF editor, QR generator, passport photo"
+    >
+
+    <meta
+        name="author"
+        content="Ayush Singh"
+    >
+
+    <meta
+        name="robots"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111525"
+    >
+
+
+    <!-- =========================================================
+         OPEN GRAPH
+    ========================================================== -->
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:title"
+        content="PixelTools — Free Online Image & PDF Tools"
+    >
+
+    <meta
+        property="og:description"
+        content="Fast and easy online tools for images, PDFs, QR codes and everyday digital tasks."
+    >
+
+    <meta
+        property="og:image"
+        content="assets/ayush-singh.jpg"
+    >
+
+    <meta
+        property="og:site_name"
+        content="PixelTools"
+    >
+
+
+    <!-- =========================================================
+         TWITTER / X
+    ========================================================== -->
+
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:title"
+        content="PixelTools — Free Online Image & PDF Tools"
+    >
+
+    <meta
+        name="twitter:description"
+        content="Free browser-based tools for images, PDFs, QR codes and everyday digital work."
+    >
+
+    <meta
+        name="twitter:image"
+        content="assets/ayush-singh.jpg"
+    >
+
+
+    <!-- =========================================================
+         STRUCTURED DATA
+    ========================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "PixelTools",
+        "description": "Free online tools for images, PDFs, QR codes and everyday digital tasks.",
+        "inLanguage": "en",
+        "creator": {
+            "@type": "Person",
+            "name": "Ayush Singh"
+        }
+    }
+    </script>
+
+
+    <!-- =========================================================
+         STYLESHEET
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+
+    <!-- =========================================================
+         ABOUT PROFILE IMAGE
+         Only styles the newly added profile image/name.
+    ========================================================== -->
+
+    <style>
+
+        .about-profile-image {
+
+            width: 170px;
+            height: 170px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            display: block;
+
+            position: relative;
+
+            z-index: 5;
+
+            border: 3px solid rgba(255, 255, 255, 0.15);
+
+            box-shadow:
+                0 0 30px rgba(124, 92, 255, 0.35),
+                0 0 70px rgba(0, 220, 255, 0.15);
+
+        }
+
+
+        .about-profile-name {
+
+            margin-top: 18px;
+
+            position: relative;
+
+            z-index: 6;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #a78bfa,
+                    #67e8f9
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .about-profile-image {
+
+                width: 140px;
+                height: 140px;
+
+            }
+
+
+            .about-profile-name {
+
+                font-size: 18px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ANIMATED BACKGROUND
+========================================================= -->
+
+<div class="background">
+
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="gradient-orb orb-4"></div>
+
+    <div class="light-beam beam-1"></div>
+    <div class="light-beam beam-2"></div>
+
+    <div class="grid-floor"></div>
+
+</div>
+
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a
+            href="#home"
+            class="logo"
+        >
+
+            <span class="logo-box">
+                P
+            </span>
+
+            <span class="logo-text">
+                Pixel<span>Tools</span>
+            </span>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="#home">
+                Home
+            </a>
+
+            <a href="#tools">
+                Tools
+            </a>
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+        </nav>
+
+
+        <a
+            href="#tools"
+            class="nav-button"
+        >
+
+            Explore Tools
+
+            <span>
+                →
+            </span>
+
+        </a>
+
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open menu"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#tools">
+            Tools
+        </a>
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+        <a
+            href="#tools"
+            class="mobile-menu-button"
+        >
+            Explore Tools →
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+
+            <span class="badge-dot"></span>
+
+            <span>
+                Powerful tools. Completely online.
+            </span>
+
+            <span class="badge-arrow">
+                ✦
+            </span>
+
+        </div>
+
+
+        <h1>
+
+            <span class="text-white">
+                Your Digital
+            </span>
+
+            <br>
+
+            <span class="gradient-text">
+                Toolbox
+            </span>
+
+            <span class="gradient-text gradient-text-2">
+                Reimagined.
+            </span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Compress, convert, resize, crop, merge,
+            enhance, analyze and transform your files
+            with fast and easy-to-use online tools.
+
+            <strong>
+                No complicated software.
+            </strong>
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="#tools"
+                class="primary-button"
+            >
+
+                <span class="button-icon">
+                    ✦
+                </span>
+
+                Explore Tools
+
+                <span class="button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="#features"
+                class="secondary-button"
+            >
+
+                <span>
+                    Discover More
+                </span>
+
+                <span>
+                    ↓
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="hero-stats">
+
+            <div class="stat">
+
+                <strong>
+                    14+
+                </strong>
+
+                <span>
+                    Tools
+                </span>
+
+            </div>
+
+
+            <div class="stat-line"></div>
+
+
+            <div class="stat">
+
+                <strong>
+                    100%
+                </strong>
+
+                <span>
+                    Browser Based
+                </span>
+
+            </div>
+
+
+            <div class="stat-line"></div>
+
+
+            <div class="stat">
+
+                <strong>
+                    0
+                </strong>
+
+                <span>
+                    Downloads Required
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HERO VISUAL
+    ====================================================== -->
+
+    <div class="hero-visual">
+
+        <div class="visual-glow"></div>
+
+        <div class="orbit orbit-1"></div>
+        <div class="orbit orbit-2"></div>
+
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+
+
+        <div
+            class="workspace-card"
+            id="workspaceCard"
+        >
+
+            <div class="workspace-top">
+
+                <div class="window-controls">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+
+                <div class="workspace-title">
+                    PixelTools Workspace
+                </div>
+
+
+                <div class="workspace-menu">
+                    •••
+                </div>
+
+            </div>
+
+
+            <div class="workspace-content">
+
+                <div class="workspace-heading">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <small>
+                            QUICK TOOLS
+                        </small>
+
+                        <h3>
+                            What do you want to do?
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mini-tools">
+
+                    <div class="mini-tool mini-blue">
+
+                        <span>
+                            🖼️
+                        </span>
+
+                        <small>
+                            Compress
+                        </small>
+
+                    </div>
+
+
+                    <div class="mini-tool mini-purple">
+
+                        <span>
+                            📄
+                        </span>
+
+                        <small>
+                            PDF Merge
+                        </small>
+
+                    </div>
+
+
+                    <div class="mini-tool mini-pink">
+
+                        <span>
+                            ✂️
+                        </span>
+
+                        <small>
+                            Crop
+                        </small>
+
+                    </div>
+
+
+                    <div class="mini-tool mini-orange">
+
+                        <span>
+                            ✨
+                        </span>
+
+                        <small>
+                            Enhance
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="workspace-upload">
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Drop your file here
+                        </strong>
+
+                        <span>
+                            or choose a tool below
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="workspace-progress">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Ready to process
+                        </span>
+
+                        <span>
+                            100%
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="floating-card floating-card-1">
+
+            <span class="floating-icon purple">
+                ✨
+            </span>
+
+            <div>
+
+                <strong>
+                    Fast
+                </strong>
+
+                <small>
+                    Processing
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="floating-card floating-card-2">
+
+            <span class="floating-icon cyan">
+                🔒
+            </span>
+
+            <div>
+
+                <strong>
+                    Private
+                </strong>
+
+                <small>
+                    Browser based
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="floating-card floating-card-3">
+
+            <span class="floating-icon orange">
+                ⚡
+            </span>
+
+            <div>
+
+                <strong>
+                    Simple
+                </strong>
+
+                <small>
+                    One click tools
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ADVERTISEMENT
+========================================================= -->
+
+<section class="ad-section">
+
+    <div class="ad-label">
+        Advertisement
+    </div>
+
+    <div class="ad-slot">
+
+        <span>
+            Your Advertisement
+        </span>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TOOLS
+========================================================= -->
+
+<section
+    class="tools-section section"
+    id="tools"
+>
+
+    <div class="section-heading">
+
+        <div class="section-label">
+
+            <span>
+                ✦
+            </span>
+
+            OUR TOOLS
+
+        </div>
+
+
+        <h2>
+
+            Everything you need,
+
+            <span>
+                in one place.
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Simple online tools designed to make your
+            everyday digital work faster and easier.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- TOOL CONTROLS -->
+
+    <div class="tools-controls">
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="search"
+                id="toolSearch"
+                placeholder="Search tools..."
+                autocomplete="off"
+            >
+
+            <kbd>
+                /
+            </kbd>
+
+        </div>
+
+
+        <div class="categories">
+
+            <button
+                class="category active"
+                data-category="all"
+            >
+                All
+            </button>
+
+
+            <button
+                class="category"
+                data-category="image"
+            >
+                🖼️ Images
+            </button>
+
+
+            <button
+                class="category"
+                data-category="pdf"
+            >
+                📄 PDF
+            </button>
+
+
+            <button
+                class="category"
+                data-category="utility"
+            >
+                ⚡ Utilities
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TOOLS GRID
+    ====================================================== -->
+
+    <div
+        class="tools-grid"
+        id="toolsGrid"
+    >
+
+
+        <!-- =================================================
+             01 IMAGE COMPRESSOR
+        ================================================== -->
+
+        <a
+            href="tools/image-compressor.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image compressor compress jpg png webp reduce image size"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-blue">
+                🖼️
+            </div>
+
+            <div class="tool-number">
+                01
+            </div>
+
+            <h3>
+                Image Compressor
+            </h3>
+
+            <p>
+                Reduce image file size while keeping excellent quality.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    JPG · PNG · WEBP
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             02 PDF COMPRESSOR
+        ================================================== -->
+
+        <a
+            href="tools/pdf-compressor.html"
+            class="tool-card"
+            data-category="pdf"
+            data-name="pdf compressor compress pdf reduce pdf size optimize pdf"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-red">
+                📄
+            </div>
+
+            <div class="tool-number">
+                02
+            </div>
+
+            <h3>
+                PDF Compressor
+            </h3>
+
+            <p>
+                Make large PDF documents smaller and easier to share.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    PDF
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             03 PASSPORT PHOTO
+        ================================================== -->
+
+        <a
+            href="tools/passport.html"
+            class="tool-card"
+            data-category="image"
+            data-name="passport photo passport size photo visa photo id photo"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-purple">
+                🪪
+            </div>
+
+            <div class="tool-number">
+                03
+            </div>
+
+            <h3>
+                Passport Photo
+            </h3>
+
+            <p>
+                Create passport-size photos with country-specific dimensions.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    PHOTO
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             04 BACKGROUND REMOVER
+        ================================================== -->
+
+        <a
+            href="tools/background-remover.html"
+            class="tool-card"
+            data-category="image"
+            data-name="background remover remove image background transparent png photo"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-pink">
+                ✨
+            </div>
+
+            <div class="tool-number">
+                04
+            </div>
+
+            <h3>
+                Background Remover
+            </h3>
+
+            <p>
+                Remove image backgrounds quickly in your browser.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    IMAGE
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             05 IMAGE RESIZER
+        ================================================== -->
+
+        <a
+            href="tools/image-resizer.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image resizer resize image dimensions change size width height"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-orange">
+                ↔️
+            </div>
+
+            <div class="tool-number">
+                05
+            </div>
+
+            <h3>
+                Image Resizer
+            </h3>
+
+            <p>
+                Resize images to exact dimensions without complicated software.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    IMAGE
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             06 IMAGE CONVERTER
+        ================================================== -->
+
+        <a
+            href="tools/image-converter.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image converter jpg png webp convert image format jpeg pdf image to pdf"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-cyan">
+                🔄
+            </div>
+
+            <div class="tool-number">
+                06
+            </div>
+
+            <h3>
+                Image Converter
+            </h3>
+
+            <p>
+                Convert images between popular formats with ease.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    JPG · PNG · WEBP
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             07 IMAGE CROPPER
+        ================================================== -->
+
+        <a
+            href="tools/image-cropper.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image cropper crop photo crop image aspect ratio"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-number">
+                07
+            </div>
+
+            <div class="tool-icon icon-green">
+                ✂️
+            </div>
+
+            <h3>
+                Image Cropper
+            </h3>
+
+            <p>
+                Crop your images to the perfect size and ratio.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    IMAGE
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             08 METADATA REMOVER
+        ================================================== -->
+
+        <a
+            href="tools/image-metadata-remover.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image metadata remover remove exif gps location camera metadata privacy"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-teal">
+                🧹
+            </div>
+
+            <div class="tool-number">
+                08
+            </div>
+
+            <h3>
+                Metadata Remover
+            </h3>
+
+            <p>
+                Remove EXIF, GPS, camera and other embedded image metadata.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    PRIVACY
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             09 METADATA EXTRACTOR
+        ================================================== -->
+
+        <a
+            href="tools/image-metadata-extractor.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image metadata extractor exif viewer gps location camera information details"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-violet">
+                🔎
+            </div>
+
+            <div class="tool-number">
+                09
+            </div>
+
+            <h3>
+                Metadata Extractor
+            </h3>
+
+            <p>
+                View EXIF information including GPS, camera, date, lens and image details.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    EXIF · GPS
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             10 IMAGE ENHANCER
+        ================================================== -->
+
+        <a
+            href="tools/image-enhancer.html"
+            class="tool-card"
+            data-category="image"
+            data-name="image enhancer enhance photo improve image quality brightness contrast sharpness saturation upscale"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-rainbow">
+                ✨
+            </div>
+
+            <div class="tool-number">
+                10
+            </div>
+
+            <h3>
+                Image Enhancer
+            </h3>
+
+            <p>
+                Improve brightness, contrast, color, sharpness and image size.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    ENHANCE
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             11 MERGE PDF
+        ================================================== -->
+
+        <a
+            href="tools/merge-pdf.html"
+            class="tool-card"
+            data-category="pdf"
+            data-name="merge pdf merger combine pdf join pdf multiple pdf concatenate pdf pdf files"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-violet">
+                📚
+            </div>
+
+            <div class="tool-number">
+                11
+            </div>
+
+            <h3>
+                PDF Merger
+            </h3>
+
+            <p>
+                Combine multiple PDF files into one PDF document in seconds.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    MERGE · PDF
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             12 SPLIT PDF
+        ================================================== -->
+
+        <a
+            href="tools/split-pdf.html"
+            class="tool-card"
+            data-category="pdf"
+            data-name="split pdf divide pdf separate pdf pages extract pages"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-yellow">
+                📑
+            </div>
+
+            <div class="tool-number">
+                12
+            </div>
+
+            <h3>
+                Split PDF
+            </h3>
+
+            <p>
+                Separate pages from a PDF document quickly.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    PDF
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             13 PDF EDITOR
+        ================================================== -->
+
+        <a
+            href="tools/pdf-editor.html"
+            class="tool-card"
+            data-category="pdf"
+            data-name="pdf editor edit pdf annotate pdf text drawing highlight signature page editing pdf document editor"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-orange">
+                🖼️
+            </div>
+
+            <div class="tool-number">
+                13
+            </div>
+
+            <h3>
+                PDF Editor
+            </h3>
+
+            <p>
+                Edit and customize PDF documents directly in your browser.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    PDF · EDIT
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             14 QR GENERATOR
+        ================================================== -->
+
+        <a
+            href="tools/qr-generator.html"
+            class="tool-card"
+            data-category="utility"
+            data-name="qr generator qr code create qr link text url wifi sms whatsapp email phone"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-teal">
+                ▦
+            </div>
+
+            <div class="tool-number">
+                14
+            </div>
+
+            <h3>
+                QR Generator
+            </h3>
+
+            <p>
+                Generate QR codes for links, text and useful information.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    UTILITY
+                </span>
+
+                <span class="tool-arrow">
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- =================================================
+             15 MORE TOOLS
+        ================================================== -->
+
+        <div
+            class="tool-card more-card"
+            data-category="all"
+            data-name="more tools coming soon"
+        >
+
+            <div class="card-glow"></div>
+
+            <div class="tool-icon icon-rainbow">
+                ✦
+            </div>
+
+            <div class="tool-number">
+                +
+            </div>
+
+            <h3>
+                More Coming Soon
+            </h3>
+
+            <p>
+                We're building more useful tools for you.
+            </p>
+
+            <div class="tool-bottom">
+
+                <span>
+                    STAY TUNED
+                </span>
+
+                <span class="tool-arrow">
+                    ✨
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NO RESULTS
+    ====================================================== -->
+
+    <div
+        class="no-results"
+        id="noResults"
+    >
+
+        <div>
+            🔎
+        </div>
+
+        <h3>
+            No tools found
+        </h3>
+
+        <p>
+            Try searching for something else.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FEATURES
+========================================================= -->
+
+<section
+    class="features-section section"
+    id="features"
+>
+
+    <div class="section-heading">
+
+        <div class="section-label">
+
+            <span>
+                ✦
+            </span>
+
+            WHY PIXELTOOLS
+
+        </div>
+
+
+        <h2>
+
+            Built to be
+
+            <span>
+                simple.
+            </span>
+
+        </h2>
+
+
+        <p>
+            Powerful features without unnecessary complexity.
+        </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+
+        <div class="feature-card feature-blue">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Fast
+            </h3>
+
+            <p>
+                Get your work done quickly with lightweight,
+                browser-based tools.
+            </p>
+
+            <div class="feature-line"></div>
+
+        </div>
+
+
+
+        <div class="feature-card feature-purple">
+
+            <div class="feature-icon">
+                🔒
+            </div>
+
+            <h3>
+                Privacy Focused
+            </h3>
+
+            <p>
+                Many tools can process your files directly
+                inside your browser.
+            </p>
+
+            <div class="feature-line"></div>
+
+        </div>
+
+
+
+        <div class="feature-card feature-pink">
+
+            <div class="feature-icon">
+                🎨
+            </div>
+
+            <h3>
+                Easy to Use
+            </h3>
+
+            <p>
+                Clean interfaces designed so you can understand
+                what to do immediately.
+            </p>
+
+            <div class="feature-line"></div>
+
+        </div>
+
+
+
+        <div class="feature-card feature-orange">
+
+            <div class="feature-icon">
+                🌐
+            </div>
+
+            <h3>
+                Works Online
+            </h3>
+
+            <p>
+                Access your favourite tools from modern browsers
+                without installing desktop software.
+            </p>
+
+            <div class="feature-line"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section
+    class="about-section section"
+    id="about"
+>
+
+    <div class="about-card">
+
+        <div class="about-content">
+
+            <div class="section-label">
+
+                <span>
+                    ✦
+                </span>
+
+                ABOUT PIXELTOOLS
+
+            </div>
+
+
+            <h2>
+
+                Small tools.
+
+                <br>
+
+                <span>
+                    Big possibilities.
+                </span>
+
+            </h2>
+
+
+            <p>
+                PixelTools is designed to bring useful digital
+                utilities together in one simple place.
+            </p>
+
+
+            <p>
+                Whether you're working with images, PDFs or
+                everyday files, our goal is to make the process
+                faster and easier.
+            </p>
+
+
+            <a
+                href="#tools"
+                class="primary-button small-button"
+            >
+
+                Start Using Tools
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="about-visual">
+
+            <div class="about-ring ring-a"></div>
+            <div class="about-ring ring-b"></div>
+            <div class="about-ring ring-c"></div>
+
+
+            <!-- =================================================
+                 AYUSH SINGH PROFILE IMAGE
+            ================================================== -->
+
+            <div class="about-logo">
+
+                <img
+                    src="assets/ayush-singh.jpg"
+                    alt="Ayush Singh"
+                    class="about-profile-image" width="170" height="170" loading="lazy" decoding="async">
+
+            </div>
+
+
+            <div class="about-profile-name">
+                Ayush Singh
+            </div>
+
+
+            <div class="about-particle particle-a"></div>
+            <div class="about-particle particle-b"></div>
+            <div class="about-particle particle-c"></div>
+            <div class="about-particle particle-d"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="cta-section">
+
+    <div class="cta-glow glow-a"></div>
+    <div class="cta-glow glow-b"></div>
+
+
+    <div class="cta-content">
+
+        <div class="section-label">
+
+            <span>
+                ✦
+            </span>
+
+            READY?
+
+        </div>
+
+
+        <h2>
+
+            Make your workflow
+
+            <span>
+                smarter.
+            </span>
+
+        </h2>
+
+
+        <p>
+            Choose a tool and get started in seconds.
+        </p>
+
+
+        <a
+            href="#tools"
+            class="primary-button"
+        >
+
+            Explore PixelTools
+
+            <span>
+                →
+            </span>
+
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-top">
+
+
+        <!-- =================================================
+             FOOTER BRAND
+        ================================================== -->
+
+        <div class="footer-brand">
+
+            <a
+                href="#home"
+                class="logo"
+            >
+
+                <span class="logo-box">
+                    P
+                </span>
+
+                <span class="logo-text">
+                    Pixel<span>Tools</span>
+                </span>
+
+            </a>
+
+
+            <p>
+                Powerful online tools for your everyday
+                digital work.
+            </p>
+
+        </div>
+
+
+
+        <div class="footer-links">
+
+
+            <!-- =================================================
+                 EXPLORE
+            ================================================== -->
+
+            <div>
+
+                <h4>
+                    Explore
+                </h4>
+
+
+                <a href="#home">
+                    Home
+                </a>
+
+
+                <a href="#tools">
+                    Tools
+                </a>
+
+
+                <a href="#features">
+                    Features
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 IMAGE TOOLS
+            ================================================== -->
+
+            <div>
+
+                <h4>
+                    Image Tools
+                </h4>
+
+
+                <a href="tools/image-compressor.html">
+                    Image Compressor
+                </a>
+
+
+                <a href="tools/image-resizer.html">
+                    Image Resizer
+                </a>
+
+
+                <a href="tools/image-converter.html">
+                    Image Converter
+                </a>
+
+
+                <a href="tools/image-cropper.html">
+                    Image Cropper
+                </a>
+
+
+                <a href="tools/background-remover.html">
+                    Background Remover
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MORE TOOLS
+            ================================================== -->
+
+            <div>
+
+                <h4>
+                    More Tools
+                </h4>
+
+
+                <a href="tools/passport.html">
+                    Passport Photo
+                </a>
+
+
+                <a href="tools/image-metadata-remover.html">
+                    Metadata Remover
+                </a>
+
+
+                <a href="tools/image-metadata-extractor.html">
+                    Metadata Extractor
+                </a>
+
+
+                <a href="tools/image-enhancer.html">
+                    Image Enhancer
+                </a>
+
+
+                <a href="tools/pdf-compressor.html">
+                    PDF Compressor
+                </a>
+
+
+                <a href="tools/merge-pdf.html">
+                    PDF Merger
+                </a>
+
+
+                <a href="tools/split-pdf.html">
+                    Split PDF
+                </a>
+
+
+                <a href="tools/pdf-editor.html">
+                    PDF Editor
+                </a>
+
+
+                <a href="tools/qr-generator.html">
+                    QR Generator
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ABOUT
+            ================================================== -->
+
+            <div>
+
+                <h4>
+                    PixelTools
+                </h4>
+
+
+                <a href="#about">
+                    About
+                </a>
+
+
+                <a href="#tools">
+                    All Tools
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER BOTTOM
+    ====================================================== -->
+
+    <div class="footer-bottom">
+
+        <span>
+
+            ©
+
+            <span id="year"></span>
+
+            PixelTools.
+
+            All rights reserved.
+
+        </span>
+
+
+        <span>
+
+            Made with
+
+            <b>
+                ✦
+            </b>
+
+            for the web.
+
+        </span>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <span>
+        ✦
+    </span>
+
+    <span id="toastMessage">
+        Welcome to PixelTools
+    </span>
+
+</div>
+
+
+
+<!-- =========================================================
+     EXISTING JAVASCRIPT
+========================================================= -->
+
+<script src="js/app.js"></script>
+
+
+
+<!-- =========================================================
+     PIXELTOOLS SEARCH + CATEGORY FILTER
+========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const searchInput =
+        document.getElementById("toolSearch");
+
+    const toolsGrid =
+        document.getElementById("toolsGrid");
+
+    const noResults =
+        document.getElementById("noResults");
+
+    const categories =
+        document.querySelectorAll(".category");
+
+    const toolCards =
+        document.querySelectorAll(
+            "#toolsGrid .tool-card:not(.more-card)"
+        );
+
+    const moreCard =
+        document.querySelector(
+            "#toolsGrid .more-card"
+        );
+
+
+    let currentCategory = "all";
+
+
+
+    /* =========================================================
+       FILTER FUNCTION
+    ========================================================= */
+
+    function filterTools() {
+
+
+        const searchText =
+            searchInput
+                ? searchInput.value
+                    .trim()
+                    .toLowerCase()
+                : "";
+
+
+        let visibleTools = 0;
+
+
+        toolCards.forEach(function (card) {
+
+
+            const category =
+                (
+                    card.dataset.category || ""
+                ).toLowerCase();
+
+
+            const name =
+                (
+                    card.dataset.name || ""
+                ).toLowerCase();
+
+
+            const title =
+                (
+                    card.querySelector("h3")?.textContent || ""
+                ).toLowerCase();
+
+
+            const description =
+                (
+                    card.querySelector("p")?.textContent || ""
+                ).toLowerCase();
+
+
+            const bottomText =
+                (
+                    card.querySelector(".tool-bottom")?.textContent || ""
+                ).toLowerCase();
+
+
+            const searchableText =
+                name +
+                " " +
+                title +
+                " " +
+                description +
+                " " +
+                bottomText;
+
+
+            const matchesSearch =
+                searchText === "" ||
+                searchableText.includes(searchText);
+
+
+            const matchesCategory =
+                currentCategory === "all" ||
+                category === currentCategory;
+
+
+            if (
+                matchesSearch &&
+                matchesCategory
+            ) {
+
+                card.style.display = "";
+
+                visibleTools++;
+
+            }
+
+            else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+
+        /* =====================================================
+           MORE COMING SOON
+        ===================================================== */
+
+        if (moreCard) {
+
+            if (
+                searchText === "" &&
+                currentCategory === "all"
+            ) {
+
+                moreCard.style.display = "";
+
+            }
+
+            else {
+
+                moreCard.style.display = "none";
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           NO RESULTS
+        ===================================================== */
+
+        if (noResults) {
+
+            if (visibleTools === 0) {
+
+                noResults.style.display = "block";
+
+            }
+
+            else {
+
+                noResults.style.display = "none";
+
+            }
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       SEARCH INPUT
+    ========================================================= */
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                filterTools();
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       CATEGORY BUTTONS
+    ========================================================= */
+
+    categories.forEach(function (button) {
+
+
+        button.addEventListener(
+            "click",
+            function () {
+
+
+                categories.forEach(
+                    function (btn) {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentCategory =
+                    button.dataset.category || "all";
+
+
+                filterTools();
+
+            }
+        );
+
+    });
+
+
+
+    /* =========================================================
+       "/" SEARCH SHORTCUT
+    ========================================================= */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+
+            const activeElement =
+                document.activeElement;
+
+
+            const activeTag =
+                activeElement &&
+                activeElement.tagName
+                    ? activeElement.tagName.toLowerCase()
+                    : "";
+
+
+            const isTyping =
+                activeTag === "input" ||
+                activeTag === "textarea" ||
+                activeTag === "select";
+
+
+            if (
+                event.key === "/" &&
+                !isTyping &&
+                searchInput
+            ) {
+
+                event.preventDefault();
+
+                searchInput.focus();
+
+            }
+
+
+
+            /* =================================================
+               ESC CLEAR SEARCH
+            ================================================= */
+
+            if (
+                event.key === "Escape" &&
+                searchInput
+            ) {
+
+                searchInput.value = "";
+
+                filterTools();
+
+                searchInput.blur();
+
+            }
+
+        }
+    );
+
+
+
+    /* =========================================================
+       INITIAL STATE
+    ========================================================= */
+
+    filterTools();
+
+});
+
+</script>
+
+
+</body>
+
+</html>

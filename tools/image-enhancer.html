@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+
+<title>Image Enhancer - PixelTools</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#090f20;
+    --bg2:#111a32;
+    --panel:rgba(18,27,52,.78);
+    --panel2:rgba(25,36,67,.68);
+    --border:rgba(255,255,255,.10);
+
+    --text:#f6f8ff;
+    --muted:#93a1c1;
+
+    --blue:#5b8cff;
+    --purple:#9b5cff;
+    --pink:#ff4f9a;
+    --cyan:#28ddff;
+    --green:#45e6a1;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    color:var(--text);
+
+    background:
+        radial-gradient(circle at 10% 10%,rgba(91,140,255,.18),transparent 27%),
+        radial-gradient(circle at 90% 15%,rgba(255,79,154,.14),transparent 28%),
+        radial-gradient(circle at 50% 100%,rgba(38,224,255,.11),transparent 32%),
+        linear-gradient(135deg,#090f20,#0d152b 48%,#111a31);
+
+    overflow-x:hidden;
+}
+
+/* =========================
+   ANIMATED BACKGROUND
+========================= */
+
+.bg-orb{
+    position:fixed;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.20;
+    pointer-events:none;
+    z-index:0;
+    animation:orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb1{
+    background:#5b5cff;
+    left:-120px;
+    top:120px;
+}
+
+.orb2{
+    background:#ff3d9a;
+    right:-120px;
+    top:350px;
+    animation-delay:2s;
+}
+
+.orb3{
+    background:#16d9ff;
+    left:38%;
+    bottom:-180px;
+    animation-delay:4s;
+}
+
+@keyframes orbFloat{
+    from{
+        transform:translate(0,0) scale(1);
+    }
+    to{
+        transform:translate(50px,-40px) scale(1.15);
+    }
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    height:74px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    position:relative;
+    z-index:10;
+
+    border-bottom:1px solid var(--border);
+
+    background:rgba(8,13,28,.72);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+.logo{
+    text-decoration:none;
+    color:white;
+
+    font-size:26px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    background:linear-gradient(
+        90deg,
+        #5b8cff,
+        #c45cff,
+        #ff4f9a
+    );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.back-btn{
+    text-decoration:none;
+    color:#dfe6ff;
+
+    padding:10px 17px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.05);
+
+    transition:.25s;
+}
+
+.back-btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(91,140,255,.5);
+    background:rgba(91,140,255,.12);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    width:min(1280px,92%);
+    margin:auto;
+
+    position:relative;
+    z-index:2;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    text-align:center;
+    padding:58px 0 38px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:8px 15px;
+
+    border-radius:50px;
+
+    border:1px solid rgba(91,140,255,.3);
+
+    background:rgba(91,140,255,.08);
+
+    color:#a7bcff;
+
+    font-size:13px;
+
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(42px,6vw,72px);
+    line-height:1;
+
+    font-weight:950;
+
+    letter-spacing:-2px;
+
+    background:linear-gradient(
+        90deg,
+        #5b8cff,
+        #c45cff,
+        #ff4f9a,
+        #26e0ff,
+        #5b8cff
+    );
+
+    background-size:300% auto;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+
+    animation:gradientMove 5s linear infinite;
+}
+
+@keyframes gradientMove{
+    to{
+        background-position:300% center;
+    }
+}
+
+.hero p{
+    max-width:690px;
+
+    margin:20px auto 0;
+
+    color:var(--muted);
+
+    line-height:1.7;
+
+    font-size:16px;
+}
+
+/* =========================
+   MAIN WORKSPACE
+========================= */
+
+.workspace{
+    display:grid;
+
+    grid-template-columns:390px 1fr;
+
+    gap:22px;
+
+    margin-bottom:55px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24,36,68,.82),
+            rgba(12,20,40,.78)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:26px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.04);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+}
+
+/* =========================
+   CONTROL PANEL
+========================= */
+
+.controls{
+    padding:25px;
+}
+
+.panel-heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+.panel-heading h2{
+    font-size:19px;
+}
+
+.panel-icon{
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        rgba(91,140,255,.18),
+        rgba(196,92,255,.16)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    font-size:18px;
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.upload-box{
+    display:block;
+
+    border:2px dashed rgba(91,140,255,.42);
+
+    border-radius:20px;
+
+    padding:27px 15px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(91,140,255,.08),
+            rgba(155,92,255,.04)
+        );
+
+    transition:.3s;
+
+    margin-bottom:25px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.upload-box::before{
+    content:"";
+
+    position:absolute;
+
+    width:150px;
+    height:150px;
+
+    background:rgba(91,140,255,.14);
+
+    filter:blur(50px);
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    opacity:0;
+
+    transition:.3s;
+}
+
+.upload-box:hover::before{
+    opacity:1;
+}
+
+.upload-box:hover,
+.upload-box.dragover{
+    border-color:#7c9fff;
+
+    background:rgba(91,140,255,.11);
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 15px 35px rgba(91,140,255,.12);
+}
+
+.upload-icon{
+    width:55px;
+    height:55px;
+
+    margin:0 auto 12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:17px;
+
+    background:linear-gradient(
+        135deg,
+        #527eff,
+        #a550ff
+    );
+
+    font-size:25px;
+
+    box-shadow:
+        0 10px 30px rgba(91,140,255,.25);
+}
+
+.upload-box strong{
+    display:block;
+
+    font-size:15px;
+
+    margin-bottom:6px;
+}
+
+.upload-box small{
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+#fileInput{
+    display:none;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.control-section{
+    margin-top:24px;
+
+    padding-top:22px;
+
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.section-label{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    margin-bottom:15px;
+
+    font-size:13px;
+
+    color:#dce5ff;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+}
+
+.section-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #5b8cff,
+        #ff4f9a
+    );
+
+    box-shadow:0 0 12px rgba(91,140,255,.7);
+}
+
+/* =========================
+   PRESETS
+========================= */
+
+.presets{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+}
+
+.preset{
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.045);
+
+    color:#dfe6ff;
+
+    padding:11px 6px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:12px;
+
+    font-weight:700;
+}
+
+.preset:hover{
+    transform:translateY(-2px);
+
+    background:rgba(91,140,255,.11);
+
+    border-color:rgba(91,140,255,.45);
+}
+
+.preset.active{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(91,140,255,.22),
+            rgba(155,92,255,.16)
+        );
+
+    border-color:rgba(91,140,255,.7);
+
+    color:white;
+
+    box-shadow:
+        0 7px 20px rgba(91,140,255,.10);
+}
+
+/* =========================
+   SLIDERS
+========================= */
+
+.control{
+    margin-bottom:18px;
+}
+
+.control-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:8px;
+}
+
+.control-header label{
+    font-size:13px;
+    color:#dfe5fa;
+}
+
+.value{
+    min-width:38px;
+
+    text-align:right;
+
+    color:#8fb0ff;
+
+    font-size:12px;
+
+    font-weight:800;
+}
+
+input[type="range"]{
+    width:100%;
+
+    height:5px;
+
+    appearance:none;
+
+    border-radius:20px;
+
+    background:#263452;
+
+    outline:none;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+    appearance:none;
+
+    width:17px;
+    height:17px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #5b8cff,
+        #c45cff
+    );
+
+    cursor:pointer;
+
+    box-shadow:
+        0 0 16px rgba(91,140,255,.6);
+}
+
+input[type="range"]::-moz-range-thumb{
+    width:17px;
+    height:17px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#7d9eff;
+
+    cursor:pointer;
+}
+
+/* =========================
+   UPSCALE
+========================= */
+
+.upscale-options{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+}
+
+.scale-btn{
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.04);
+
+    color:#dfe6ff;
+
+    padding:10px 5px;
+
+    border-radius:11px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.scale-btn:hover{
+    background:rgba(91,140,255,.09);
+}
+
+.scale-btn.active{
+    background:rgba(91,140,255,.17);
+
+    border-color:rgba(91,140,255,.65);
+
+    color:white;
+
+    box-shadow:
+        inset 0 0 20px rgba(91,140,255,.05);
+}
+
+/* =========================
+   EXPORT
+========================= */
+
+.output-row{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+}
+
+.field-label{
+    display:block;
+
+    font-size:11px;
+
+    color:#8491af;
+
+    margin-bottom:7px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+}
+
+select{
+    width:100%;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    background:#151f39;
+
+    color:white;
+
+    outline:none;
+
+    cursor:pointer;
+}
+
+select:focus{
+    border-color:rgba(91,140,255,.6);
+}
+
+select option{
+    background:#151f39;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons{
+    display:grid;
+
+    grid-template-columns:1.4fr 1fr;
+
+    gap:10px;
+
+    margin-top:20px;
+}
+
+.primary-btn,
+.secondary-btn{
+    border:none;
+
+    padding:14px;
+
+    border-radius:13px;
+
+    cursor:pointer;
+
+    font-weight:800;
+
+    transition:.25s;
+
+    font-size:13px;
+}
+
+.primary-btn{
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #527eff,
+            #a550ff
+        );
+
+    box-shadow:
+        0 10px 25px rgba(91,140,255,.23);
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 15px 32px rgba(91,140,255,.35);
+}
+
+.secondary-btn{
+    color:#dbe4ff;
+
+    background:rgba(255,255,255,.065);
+
+    border:1px solid var(--border);
+}
+
+.secondary-btn:hover{
+    background:rgba(255,255,255,.11);
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-wrap{
+    display:none;
+
+    margin-top:17px;
+}
+
+.progress-bar{
+    height:7px;
+
+    border-radius:20px;
+
+    background:#202b48;
+
+    overflow:hidden;
+}
+
+.progress{
+    height:100%;
+
+    width:0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5b8cff,
+            #c65cff,
+            #ff4f9a
+        );
+
+    border-radius:inherit;
+
+    transition:width .2s;
+}
+
+.progress-text{
+    text-align:center;
+
+    margin-top:7px;
+
+    color:#8c9bc0;
+
+    font-size:11px;
+}
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+.download-area{
+    display:none;
+
+    margin-top:14px;
+}
+
+.download-btn{
+    width:100%;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:13px;
+
+    color:white;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #20c98b,
+            #2de0d0
+        );
+
+    box-shadow:
+        0 10px 25px rgba(45,224,208,.15);
+
+    transition:.25s;
+}
+
+.download-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 15px 30px rgba(45,224,208,.25);
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice{
+    margin-top:18px;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    background:rgba(38,224,255,.055);
+
+    border:1px solid rgba(38,224,255,.12);
+
+    color:#9db6c8;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+/* =========================
+   PREVIEW CARD
+========================= */
+
+.preview-card{
+    padding:20px;
+
+    min-height:720px;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.preview-header{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+}
+
+.preview-title{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.preview-title h2{
+    font-size:18px;
+}
+
+.preview-title-icon{
+    width:36px;
+    height:36px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:rgba(155,92,255,.12);
+
+    border:1px solid rgba(155,92,255,.2);
+}
+
+.status{
+    padding:7px 11px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid var(--border);
+
+    color:#94a2c1;
+
+    font-size:11px;
+}
+
+/* =========================
+   PREVIEW AREA
+========================= */
+
+.preview-area{
+    flex:1;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+
+    min-height:500px;
+}
+
+.preview-box{
+    position:relative;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    min-height:480px;
+
+    background:
+        linear-gradient(45deg,#1b2540 25%,transparent 25%),
+        linear-gradient(-45deg,#1b2540 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#1b2540 75%),
+        linear-gradient(-45deg,transparent 75%,#1b2540 75%);
+
+    background-size:26px 26px;
+
+    background-position:
+        0 0,
+        0 13px,
+        13px -13px,
+        -13px 0;
+
+    border:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+        inset 0 0 50px rgba(0,0,0,.16);
+}
+
+.preview-box::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    border-radius:20px;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025);
+}
+
+.preview-box img,
+.preview-box canvas{
+    max-width:100%;
+    max-height:100%;
+
+    display:block;
+
+    object-fit:contain;
+}
+
+.preview-label{
+    position:absolute;
+
+    top:13px;
+    left:13px;
+
+    z-index:4;
+
+    padding:7px 11px;
+
+    border-radius:8px;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:.7px;
+
+    background:rgba(5,8,18,.68);
+
+    color:white;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
+}
+
+.empty{
+    color:#687698;
+
+    text-align:center;
+
+    padding:20px;
+
+    font-size:13px;
+}
+
+.empty-icon{
+    width:65px;
+    height:65px;
+
+    margin:0 auto 12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid rgba(255,255,255,.07);
+
+    font-size:29px;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info-row{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin-top:15px;
+}
+
+.info{
+    padding:14px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+}
+
+.info span{
+    display:block;
+
+    font-size:10px;
+
+    color:#7785a5;
+
+    margin-bottom:6px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+}
+
+.info strong{
+    font-size:13px;
+
+    color:#edf1ff;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+
+    color:#64718e;
+
+    padding:20px 0 40px;
+
+    font-size:12px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1000px){
+
+    .workspace{
+        grid-template-columns:1fr;
+    }
+
+    .controls{
+        max-width:none;
+    }
+
+    .preview-card{
+        min-height:600px;
+    }
+}
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:0 4%;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .back-btn{
+        padding:8px 11px;
+        font-size:12px;
+    }
+
+    .hero{
+        padding-top:40px;
+    }
+
+    .hero h1{
+        font-size:44px;
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .preview-area{
+        grid-template-columns:1fr;
+        min-height:auto;
+    }
+
+    .preview-box{
+        min-height:330px;
+        height:330px;
+    }
+
+    .preview-card{
+        min-height:auto;
+    }
+}
+
+@media(max-width:480px){
+
+    .container{
+        width:94%;
+    }
+
+    .controls,
+    .preview-card{
+        padding:17px;
+    }
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .presets{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .output-row,
+    .buttons,
+    .info-row{
+        grid-template-columns:1fr;
+    }
+
+    .preview-box{
+        height:300px;
+        min-height:300px;
+    }
+
+    .panel-heading h2{
+        font-size:17px;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+    <a href="../index.html" class="logo">
+        Pixel<span>Tools</span>
+    </a>
+
+    <a href="../index.html" class="back-btn">
+        ← Back to PixelTools
+    </a>
+
+</nav>
+
+
+<main class="container">
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        ✨ 100% Browser Based • No Upload
+    </div>
+
+    <h1>
+        Image Enhancer
+    </h1>
+
+    <p>
+        Make your images brighter, sharper and more vibrant.
+        Adjust every detail directly in your browser —
+        fast, private and completely client-side.
+    </p>
+
+</section>
+
+
+<section class="workspace">
+
+<!-- =================================
+     LEFT CONTROL PANEL
+================================= -->
+
+<div class="card controls">
+
+    <div class="panel-heading">
+
+        <h2>
+            Enhancement Studio
+        </h2>
+
+        <div class="panel-icon">
+            ✨
+        </div>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <label class="upload-box" id="uploadBox">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <strong>
+            Drop your image here
+        </strong>
+
+        <small>
+            Click to browse • JPG, PNG, WEBP
+        </small>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+    </label>
+
+
+    <!-- PRESETS -->
+
+    <div class="control-section">
+
+        <div class="section-label">
+
+            <span class="section-dot"></span>
+
+            Quick Presets
+
+        </div>
+
+        <div class="presets">
+
+            <button class="preset" data-preset="auto">
+                ✨ Auto
+            </button>
+
+            <button class="preset" data-preset="clear">
+                🔎 Clear
+            </button>
+
+            <button class="preset" data-preset="vivid">
+                🌈 Vivid
+            </button>
+
+            <button class="preset" data-preset="warm">
+                ☀️ Warm
+            </button>
+
+            <button class="preset" data-preset="bw">
+                ⚫ B&W
+            </button>
+
+            <button class="preset" data-preset="reset">
+                ↺ Reset
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADJUSTMENTS -->
+
+    <div class="control-section">
+
+        <div class="section-label">
+
+            <span class="section-dot"></span>
+
+            Adjustments
+
+        </div>
+
+
+        <!-- Brightness -->
+
+        <div class="control">
+
+            <div class="control-header">
+
+                <label>
+                    Brightness
+                </label>
+
+                <span
+                    class="value"
+                    id="brightnessValue"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <input
+                type="range"
+                id="brightness"
+                min="-100"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <!-- Contrast -->
+
+        <div class="control">
+
+            <div class="control-header">
+
+                <label>
+                    Contrast
+                </label>
+
+                <span
+                    class="value"
+                    id="contrastValue"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <input
+                type="range"
+                id="contrast"
+                min="-100"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <!-- Saturation -->
+
+        <div class="control">
+
+            <div class="control-header">
+
+                <label>
+                    Saturation
+                </label>
+
+                <span
+                    class="value"
+                    id="saturationValue"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <input
+                type="range"
+                id="saturation"
+                min="-100"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <!-- Sharpness -->
+
+        <div class="control">
+
+            <div class="control-header">
+
+                <label>
+                    Sharpness
+                </label>
+
+                <span
+                    class="value"
+                    id="sharpnessValue"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <input
+                type="range"
+                id="sharpness"
+                min="0"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <!-- Warmth -->
+
+        <div class="control">
+
+            <div class="control-header">
+
+                <label>
+                    Warmth
+                </label>
+
+                <span
+                    class="value"
+                    id="warmthValue"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <input
+                type="range"
+                id="warmth"
+                min="-100"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- UPSCALE -->
+
+    <div class="control-section">
+
+        <div class="section-label">
+
+            <span class="section-dot"></span>
+
+            Upscale
+
+        </div>
+
+        <div class="upscale-options">
+
+            <button
+                class="scale-btn active"
+                data-scale="1"
+            >
+                1×
+            </button>
+
+            <button
+                class="scale-btn"
+                data-scale="2"
+            >
+                2×
+            </button>
+
+            <button
+                class="scale-btn"
+                data-scale="3"
+            >
+                3×
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- EXPORT -->
+
+    <div class="control-section">
+
+        <div class="section-label">
+
+            <span class="section-dot"></span>
+
+            Export
+
+        </div>
+
+
+        <div class="output-row">
+
+            <div>
+
+                <span class="field-label">
+                    Format
+                </span>
+
+                <select id="format">
+
+                    <option value="image/jpeg">
+                        JPG
+                    </option>
+
+                    <option value="image/png">
+                        PNG
+                    </option>
+
+                    <option value="image/webp">
+                        WEBP
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <span class="field-label">
+                    Quality
+                </span>
+
+                <select id="quality">
+
+                    <option value="0.95">
+                        High
+                    </option>
+
+                    <option
+                        value="0.85"
+                        selected
+                    >
+                        Good
+                    </option>
+
+                    <option value="0.70">
+                        Medium
+                    </option>
+
+                    <option value="0.50">
+                        Small
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <button
+            class="primary-btn"
+            id="enhanceBtn"
+        >
+            ✨ Enhance Image
+        </button>
+
+        <button
+            class="secondary-btn"
+            id="resetBtn"
+        >
+            ↺ Reset
+        </button>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div
+        class="progress-wrap"
+        id="progressWrap"
+    >
+
+        <div class="progress-bar">
+
+            <div
+                class="progress"
+                id="progress"
+            ></div>
+
+        </div>
+
+        <div
+            class="progress-text"
+            id="progressText"
+        >
+            Processing...
+        </div>
+
+    </div>
+
+
+    <!-- DOWNLOAD -->
+
+    <div
+        class="download-area"
+        id="downloadArea"
+    >
+
+        <button
+            class="download-btn"
+            id="downloadBtn"
+        >
+            ⬇ Download Enhanced Image
+        </button>
+
+    </div>
+
+
+    <!-- PRIVACY -->
+
+    <div class="notice">
+
+        🔒 <strong>Private & Secure:</strong>
+
+        Your image never leaves your device.
+        PixelTools processes everything directly
+        inside your browser.
+
+    </div>
+
+</div>
+
+
+<!-- =================================
+     PREVIEW PANEL
+================================= -->
+
+<div class="card preview-card">
+
+    <div class="preview-header">
+
+        <div class="preview-title">
+
+            <div class="preview-title-icon">
+                🪄
+            </div>
+
+            <h2>
+                Before & After
+            </h2>
+
+        </div>
+
+        <span
+            class="status"
+            id="status"
+        >
+            Waiting for image
+        </span>
+
+    </div>
+
+
+    <div class="preview-area">
+
+        <!-- ORIGINAL -->
+
+        <div class="preview-box">
+
+            <div class="preview-label">
+                ORIGINAL
+            </div>
+
+            <div
+                class="empty"
+                id="originalEmpty"
+            >
+
+                <div class="empty-icon">
+                    📷
+                </div>
+
+                Upload an image to begin
+
+            </div>
+
+            <img
+                id="originalImage"
+                style="display:none;"
+                alt="Original image"
+            >
+
+        </div>
+
+
+        <!-- ENHANCED -->
+
+        <div class="preview-box">
+
+            <div class="preview-label">
+                ENHANCED
+            </div>
+
+            <div
+                class="empty"
+                id="enhancedEmpty"
+            >
+
+                <div class="empty-icon">
+                    ✨
+                </div>
+
+                Enhanced preview will appear here
+
+            </div>
+
+            <canvas
+                id="previewCanvas"
+                style="display:none;"
+            ></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="info-row">
+
+        <div class="info">
+
+            <span>
+                Original
+            </span>
+
+            <strong id="originalInfo">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="info">
+
+            <span>
+                Output
+            </span>
+
+            <strong id="outputInfo">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="info">
+
+            <span>
+                Scale
+            </span>
+
+            <strong id="scaleInfo">
+                1×
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    © <span id="year"></span>
+    PixelTools — Powerful tools, right in your browser.
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+const originalImage =
+    document.getElementById("originalImage");
+
+const originalEmpty =
+    document.getElementById("originalEmpty");
+
+const previewCanvas =
+    document.getElementById("previewCanvas");
+
+const enhancedEmpty =
+    document.getElementById("enhancedEmpty");
+
+const enhanceBtn =
+    document.getElementById("enhanceBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const downloadArea =
+    document.getElementById("downloadArea");
+
+const progressWrap =
+    document.getElementById("progressWrap");
+
+const progress =
+    document.getElementById("progress");
+
+const progressText =
+    document.getElementById("progressText");
+
+const statusText =
+    document.getElementById("status");
+
+const brightness =
+    document.getElementById("brightness");
+
+const contrast =
+    document.getElementById("contrast");
+
+const saturation =
+    document.getElementById("saturation");
+
+const sharpness =
+    document.getElementById("sharpness");
+
+const warmth =
+    document.getElementById("warmth");
+
+const brightnessValue =
+    document.getElementById("brightnessValue");
+
+const contrastValue =
+    document.getElementById("contrastValue");
+
+const saturationValue =
+    document.getElementById("saturationValue");
+
+const sharpnessValue =
+    document.getElementById("sharpnessValue");
+
+const warmthValue =
+    document.getElementById("warmthValue");
+
+const format =
+    document.getElementById("format");
+
+const quality =
+    document.getElementById("quality");
+
+const scaleValue =
+    document.getElementById("scaleValue");
+
+const scaleInfo =
+    document.getElementById("scaleInfo");
+
+
+let sourceImage = null;
+let sourceFile = null;
+let finalBlob = null;
+let selectedScale = 1;
+
+
+/* =========================================
+   UPLOAD
+========================================= */
+
+uploadBox.addEventListener(
+    "click",
+    () => {
+        fileInput.click();
+    }
+);
+
+
+fileInput.addEventListener(
+    "change",
+    e => {
+
+        if(e.target.files.length){
+            loadImage(e.target.files[0]);
+        }
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "dragover",
+    e => {
+
+        e.preventDefault();
+
+        uploadBox.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "dragleave",
+    () => {
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "drop",
+    e => {
+
+        e.preventDefault();
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+        const file =
+            e.dataTransfer.files[0];
+
+        if(
+            file &&
+            /^image\/(jpeg|png|webp)$/.test(
+                file.type
+            )
+        ){
+
+            loadImage(file);
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   LOAD IMAGE
+========================================= */
+
+function loadImage(file){
+
+    if(
+        !/^image\/(jpeg|png|webp)$/.test(
+            file.type
+        )
+    ){
+
+        alert(
+            "Please select a JPG, PNG or WEBP image."
+        );
+
+        return;
+    }
+
+    sourceFile = file;
+
+    const url =
+        URL.createObjectURL(file);
+
+    const img =
+        new Image();
+
+    img.onload = () => {
+
+        sourceImage = img;
+
+        originalImage.src = url;
+
+        originalImage.style.display =
+            "block";
+
+        originalEmpty.style.display =
+            "none";
+
+        enhancedEmpty.style.display =
+            "block";
+
+        previewCanvas.style.display =
+            "none";
+
+        document.getElementById(
+            "originalInfo"
+        ).textContent =
+            `${img.naturalWidth} × ${img.naturalHeight}`;
+
+        document.getElementById(
+            "outputInfo"
+        ).textContent =
+            "—";
+
+        statusText.textContent =
+            "Image loaded";
+
+        downloadArea.style.display =
+            "none";
+
+        resetControlsOnly();
+
+        applyEnhancement();
+
+    };
+
+    img.onerror = () => {
+
+        alert(
+            "Unable to read this image."
+        );
+
+        URL.revokeObjectURL(url);
+
+    };
+
+    img.src = url;
+}
+
+
+/* =========================================
+   VALUE LABELS
+========================================= */
+
+function updateValueLabels(){
+
+    brightnessValue.textContent =
+        brightness.value;
+
+    contrastValue.textContent =
+        contrast.value;
+
+    saturationValue.textContent =
+        saturation.value;
+
+    sharpnessValue.textContent =
+        sharpness.value;
+
+    warmthValue.textContent =
+        warmth.value;
+
+}
+
+
+[
+    brightness,
+    contrast,
+    saturation,
+    sharpness,
+    warmth
+].forEach(input => {
+
+    input.addEventListener(
+        "input",
+        () => {
+
+            updateValueLabels();
+
+            if(sourceImage){
+                applyEnhancement();
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   SCALE
+========================================= */
+
+document.querySelectorAll(
+    ".scale-btn"
+).forEach(btn => {
+
+    btn.addEventListener(
+        "click",
+        () => {
+
+            document.querySelectorAll(
+                ".scale-btn"
+            ).forEach(
+                b => b.classList.remove("active")
+            );
+
+            btn.classList.add("active");
+
+            selectedScale =
+                Number(btn.dataset.scale);
+
+            scaleValue.textContent =
+                selectedScale + "×";
+
+            scaleInfo.textContent =
+                selectedScale + "×";
+
+            if(sourceImage){
+                applyEnhancement();
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   PRESETS
+========================================= */
+
+document.querySelectorAll(
+    ".preset"
+).forEach(btn => {
+
+    btn.addEventListener(
+        "click",
+        () => {
+
+            document.querySelectorAll(
+                ".preset"
+            ).forEach(
+                b => b.classList.remove("active")
+            );
+
+            btn.classList.add("active");
+
+            const p =
+                btn.dataset.preset;
+
+
+            if(p === "auto"){
+
+                setControls(
+                    8,
+                    12,
+                    8,
+                    25,
+                    0
+                );
+
+            }
+
+            else if(p === "clear"){
+
+                setControls(
+                    4,
+                    18,
+                    0,
+                    55,
+                    0
+                );
+
+            }
+
+            else if(p === "vivid"){
+
+                setControls(
+                    5,
+                    10,
+                    38,
+                    20,
+                    0
+                );
+
+            }
+
+            else if(p === "warm"){
+
+                setControls(
+                    5,
+                    8,
+                    12,
+                    15,
+                    35
+                );
+
+            }
+
+            else if(p === "bw"){
+
+                setControls(
+                    4,
+                    12,
+                    -100,
+                    25,
+                    0
+                );
+
+            }
+
+            else if(p === "reset"){
+
+                resetControlsOnly();
+
+            }
+
+            updateValueLabels();
+
+            if(sourceImage){
+                applyEnhancement();
+            }
+
+        }
+    );
+
+});
+
+
+function setControls(
+    b,
+    c,
+    s,
+    sh,
+    w
+){
+
+    brightness.value = b;
+    contrast.value = c;
+    saturation.value = s;
+    sharpness.value = sh;
+    warmth.value = w;
+
+}
+
+
+function resetControlsOnly(){
+
+    setControls(
+        0,
+        0,
+        0,
+        0,
+        0
+    );
+
+    updateValueLabels();
+
+    document.querySelectorAll(
+        ".preset"
+    ).forEach(
+        b => b.classList.remove("active")
+    );
+
+}
+
+
+/* =========================================
+   ENHANCEMENT
+========================================= */
+
+let processingTimer = null;
+
+async function applyEnhancement(){
+
+    if(!sourceImage) return;
+
+    clearTimeout(processingTimer);
+
+    processingTimer =
+        setTimeout(
+            async () => {
+
+                progressWrap.style.display =
+                    "block";
+
+                progress.style.width =
+                    "10%";
+
+                progressText.textContent =
+                    "Preparing image...";
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(resolve,20)
+                );
+
+                try{
+
+                    const maxDimension =
+                        4000;
+
+                    const width =
+                        sourceImage.naturalWidth;
+
+                    const height =
+                        sourceImage.naturalHeight;
+
+
+                    const requestedWidth =
+                        width * selectedScale;
+
+                    const requestedHeight =
+                        height * selectedScale;
+
+
+                    let outputWidth =
+                        requestedWidth;
+
+                    let outputHeight =
+                        requestedHeight;
+
+
+                    if(
+                        Math.max(
+                            outputWidth,
+                            outputHeight
+                        ) > maxDimension
+                    ){
+
+                        const ratio =
+                            maxDimension /
+                            Math.max(
+                                outputWidth,
+                                outputHeight
+                            );
+
+                        outputWidth =
+                            Math.round(
+                                outputWidth * ratio
+                            );
+
+                        outputHeight =
+                            Math.round(
+                                outputHeight * ratio
+                            );
+
+                    }
+
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+                    canvas.width =
+                        outputWidth;
+
+                    canvas.height =
+                        outputHeight;
+
+
+                    const ctx =
+                        canvas.getContext(
+                            "2d",
+                            {
+                                willReadFrequently:true
+                            }
+                        );
+
+
+                    ctx.imageSmoothingEnabled =
+                        true;
+
+                    ctx.imageSmoothingQuality =
+                        "high";
+
+
+                    progress.style.width =
+                        "30%";
+
+                    progressText.textContent =
+                        "Improving colors...";
+
+
+                    const b =
+                        Number(
+                            brightness.value
+                        );
+
+                    const c =
+                        Number(
+                            contrast.value
+                        );
+
+                    const s =
+                        Number(
+                            saturation.value
+                        );
+
+
+                    ctx.filter =
+                        `brightness(${100+b}%) ` +
+                        `contrast(${100+c}%) ` +
+                        `saturate(${100+s}%)`;
+
+
+                    ctx.drawImage(
+                        sourceImage,
+                        0,
+                        0,
+                        outputWidth,
+                        outputHeight
+                    );
+
+
+                    ctx.filter =
+                        "none";
+
+
+                    progress.style.width =
+                        "55%";
+
+                    progressText.textContent =
+                        "Applying warmth...";
+
+
+                    const warm =
+                        Number(
+                            warmth.value
+                        );
+
+
+                    if(warm !== 0){
+
+                        const imageData =
+                            ctx.getImageData(
+                                0,
+                                0,
+                                outputWidth,
+                                outputHeight
+                            );
+
+                        const data =
+                            imageData.data;
+
+                        const amount =
+                            warm / 100;
+
+
+                        for(
+                            let i=0;
+                            i<data.length;
+                            i+=4
+                        ){
+
+                            data[i] =
+                                clamp(
+                                    data[i] +
+                                    35 * amount
+                                );
+
+                            data[i+2] =
+                                clamp(
+                                    data[i+2] -
+                                    35 * amount
+                                );
+
+                        }
+
+
+                        ctx.putImageData(
+                            imageData,
+                            0,
+                            0
+                        );
+
+                    }
+
+
+                    progress.style.width =
+                        "72%";
+
+                    progressText.textContent =
+                        "Sharpening details...";
+
+
+                    const sharp =
+                        Number(
+                            sharpness.value
+                        );
+
+
+                    if(sharp > 0){
+
+                        applySharpness(
+                            ctx,
+                            outputWidth,
+                            outputHeight,
+                            sharp
+                        );
+
+                    }
+
+
+                    progress.style.width =
+                        "88%";
+
+                    progressText.textContent =
+                        "Creating preview...";
+
+
+                    previewCanvas.width =
+                        outputWidth;
+
+                    previewCanvas.height =
+                        outputHeight;
+
+
+                    const previewCtx =
+                        previewCanvas.getContext(
+                            "2d"
+                        );
+
+
+                    previewCtx.clearRect(
+                        0,
+                        0,
+                        outputWidth,
+                        outputHeight
+                    );
+
+
+                    previewCtx.drawImage(
+                        canvas,
+                        0,
+                        0
+                    );
+
+
+                    previewCanvas.style.display =
+                        "block";
+
+                    enhancedEmpty.style.display =
+                        "none";
+
+
+                    const selectedFormat =
+                        format.value;
+
+                    const q =
+                        Number(
+                            quality.value
+                        );
+
+
+                    finalBlob =
+                        await canvasToBlob(
+                            canvas,
+                            selectedFormat,
+                            q
+                        );
+
+
+                    if(!finalBlob){
+                        throw new Error(
+                            "Could not create output."
+                        );
+                    }
+
+
+                    progress.style.width =
+                        "100%";
+
+                    progressText.textContent =
+                        "Enhancement complete";
+
+                    statusText.textContent =
+                        "Enhanced successfully";
+
+
+                    document.getElementById(
+                        "outputInfo"
+                    ).textContent =
+                        `${outputWidth} × ${outputHeight}`;
+
+
+                    downloadArea.style.display =
+                        "block";
+
+
+                    setTimeout(
+                        () => {
+
+                            progressWrap.style.display =
+                                "none";
+
+                        },
+                        600
+                    );
+
+                }
+                catch(error){
+
+                    console.error(error);
+
+                    progressWrap.style.display =
+                        "none";
+
+                    statusText.textContent =
+                        "Enhancement failed";
+
+                    alert(
+                        "Unable to enhance this image. Try a smaller image."
+                    );
+
+                }
+
+            },
+            80
+        );
+}
+
+
+/* =========================================
+   SHARPEN
+========================================= */
+
+function applySharpness(
+    ctx,
+    width,
+    height,
+    amount
+){
+
+    if(width * height > 12000000){
+
+        return;
+
+    }
+
+
+    const imageData =
+        ctx.getImageData(
+            0,
+            0,
+            width,
+            height
+        );
+
+    const src =
+        imageData.data;
+
+    const copy =
+        new Uint8ClampedArray(src);
+
+
+    const strength =
+        amount / 100;
+
+
+    for(
+        let y=1;
+        y<height-1;
+        y++
+    ){
+
+        for(
+            let x=1;
+            x<width-1;
+            x++
+        ){
+
+            const index =
+                (y * width + x) * 4;
+
+
+            for(
+                let channel=0;
+                channel<3;
+                channel++
+            ){
+
+                const center =
+                    copy[index + channel];
+
+                const top =
+                    copy[
+                        index -
+                        width * 4 +
+                        channel
+                    ];
+
+                const bottom =
+                    copy[
+                        index +
+                        width * 4 +
+                        channel
+                    ];
+
+                const left =
+                    copy[
+                        index -
+                        4 +
+                        channel
+                    ];
+
+                const right =
+                    copy[
+                        index +
+                        4 +
+                        channel
+                    ];
+
+
+                const sharpened =
+                    5 * center -
+                    top -
+                    bottom -
+                    left -
+                    right;
+
+
+                src[index + channel] =
+                    clamp(
+                        center +
+                        (
+                            sharpened -
+                            center
+                        ) * strength
+                    );
+
+            }
+
+        }
+
+    }
+
+
+    ctx.putImageData(
+        imageData,
+        0,
+        0
+    );
+
+}
+
+
+/* =========================================
+   CLAMP
+========================================= */
+
+function clamp(value){
+
+    return Math.max(
+        0,
+        Math.min(
+            255,
+            Math.round(value)
+        )
+    );
+
+}
+
+
+/* =========================================
+   CANVAS TO BLOB
+========================================= */
+
+function canvasToBlob(
+    canvas,
+    type,
+    quality
+){
+
+    return new Promise(
+        resolve => {
+
+            canvas.toBlob(
+                blob => resolve(blob),
+                type,
+                quality
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   ENHANCE BUTTON
+========================================= */
+
+enhanceBtn.addEventListener(
+    "click",
+    () => {
+
+        if(!sourceImage){
+
+            alert(
+                "Please upload an image first."
+            );
+
+            return;
+
+        }
+
+        applyEnhancement();
+
+    }
+);
+
+
+/* =========================================
+   FORMAT
+========================================= */
+
+format.addEventListener(
+    "change",
+    () => {
+
+        if(sourceImage){
+            applyEnhancement();
+        }
+
+    }
+);
+
+
+/* =========================================
+   QUALITY
+========================================= */
+
+quality.addEventListener(
+    "change",
+    () => {
+
+        if(sourceImage){
+            applyEnhancement();
+        }
+
+    }
+);
+
+
+/* =========================================
+   DOWNLOAD
+========================================= */
+
+downloadBtn.addEventListener(
+    "click",
+    () => {
+
+        if(!finalBlob){
+
+            alert(
+                "Please enhance an image first."
+            );
+
+            return;
+
+        }
+
+
+        let extension =
+            "jpg";
+
+
+        if(
+            format.value ===
+            "image/png"
+        ){
+
+            extension =
+                "png";
+
+        }
+
+        else if(
+            format.value ===
+            "image/webp"
+        ){
+
+            extension =
+                "webp";
+
+        }
+
+
+        const url =
+            URL.createObjectURL(
+                finalBlob
+            );
+
+
+        const a =
+            document.createElement(
+                "a"
+            );
+
+
+        let originalName =
+            "image";
+
+
+        if(sourceFile){
+
+            originalName =
+                sourceFile.name
+                    .replace(
+                        /\.[^/.]+$/,
+                        ""
+                    );
+
+        }
+
+
+        a.href =
+            url;
+
+        a.download =
+            `${originalName}-enhanced.${extension}`;
+
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+
+        setTimeout(
+            () => {
+                URL.revokeObjectURL(url);
+            },
+            1000
+        );
+
+    }
+);
+
+
+/* =========================================
+   RESET
+========================================= */
+
+resetBtn.addEventListener(
+    "click",
+    () => {
+
+        sourceImage = null;
+        sourceFile = null;
+        finalBlob = null;
+
+        fileInput.value = "";
+
+        originalImage.src = "";
+
+        originalImage.style.display =
+            "none";
+
+        originalEmpty.style.display =
+            "block";
+
+        previewCanvas.style.display =
+            "none";
+
+        enhancedEmpty.style.display =
+            "block";
+
+        downloadArea.style.display =
+            "none";
+
+        progressWrap.style.display =
+            "none";
+
+        statusText.textContent =
+            "Waiting for image";
+
+
+        document.getElementById(
+            "originalInfo"
+        ).textContent =
+            "—";
+
+
+        document.getElementById(
+            "outputInfo"
+        ).textContent =
+            "—";
+
+
+        selectedScale =
+            1;
+
+
+        document.querySelectorAll(
+            ".scale-btn"
+        ).forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+            if(
+                btn.dataset.scale ===
+                "1"
+            ){
+
+                btn.classList.add(
+                    "active"
+                );
+
+            }
+
+        });
+
+
+        scaleValue.textContent =
+            "1×";
+
+        scaleInfo.textContent =
+            "1×";
+
+
+        resetControlsOnly();
+
+    }
+);
+
+
+/* =========================================
+   YEAR
+========================================= */
+
+document.getElementById(
+    "year"
+).textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

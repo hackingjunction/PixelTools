@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Background Remover — PixelTools</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    color:#f5f7ff;
+    min-height:100vh;
+    overflow-x:hidden;
+
+    background:
+        radial-gradient(circle at 10% 15%,rgba(111,76,255,.22),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(0,210,255,.14),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(255,54,180,.12),transparent 35%),
+        #111525;
+}
+
+/* BACKGROUND */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(5px);
+    animation:float 12s ease-in-out infinite;
+}
+
+.orb1{
+    width:340px;
+    height:340px;
+    left:-130px;
+    top:-100px;
+    background:radial-gradient(circle,#765cff,transparent 68%);
+}
+
+.orb2{
+    width:300px;
+    height:300px;
+    right:-120px;
+    top:150px;
+    background:radial-gradient(circle,#00d9ff,transparent 68%);
+    animation-delay:-4s;
+}
+
+.orb3{
+    width:350px;
+    height:350px;
+    left:35%;
+    bottom:-220px;
+    background:radial-gradient(circle,#ff3bb5,transparent 68%);
+    animation-delay:-8s;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(25px,-25px) scale(1.08);
+    }
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+    opacity:.06;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);
+
+    background-size:50px 50px;
+}
+
+/* NAVBAR */
+
+.navbar{
+    padding:20px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-size:21px;
+    font-weight:800;
+}
+
+.logo-icon{
+    width:41px;
+    height:41px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:linear-gradient(
+        135deg,
+        #735cff,
+        #00d9ff
+    );
+
+    box-shadow:
+        0 10px 35px rgba(90,80,255,.35);
+
+    animation:logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse{
+    0%,100%{
+        transform:rotate(0deg) scale(1);
+    }
+
+    50%{
+        transform:rotate(8deg) scale(1.05);
+    }
+}
+
+.logo span{
+    background:
+        linear-gradient(
+            90deg,
+            white,
+            #9e91ff,
+            #60eaff
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.back{
+    color:#aeb6d0;
+    text-decoration:none;
+
+    padding:10px 17px;
+
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:12px;
+
+    background:rgba(255,255,255,.04);
+
+    transition:.3s;
+}
+
+.back:hover{
+    color:white;
+    transform:translateY(-2px);
+    border-color:#7060ff;
+}
+
+/* HERO */
+
+.hero{
+    text-align:center;
+    padding:55px 20px 30px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:8px 15px;
+
+    border-radius:100px;
+
+    color:#bbb3ff;
+
+    background:rgba(105,82,255,.10);
+
+    border:1px solid rgba(120,100,255,.25);
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#7c69ff;
+
+    box-shadow:0 0 15px #7c69ff;
+
+    animation:dotPulse 1.5s infinite;
+}
+
+@keyframes dotPulse{
+    0%,100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.6);
+        opacity:.5;
+    }
+}
+
+.hero h1{
+    margin-top:22px;
+
+    font-size:clamp(43px,7vw,76px);
+
+    line-height:1.03;
+
+    letter-spacing:-4px;
+
+    font-weight:800;
+}
+
+.gradient{
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #9e8bff,
+            #54dcff,
+            #ff6bd6,
+            #fff
+        );
+
+    background-size:300% auto;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+
+    animation:gradient 6s linear infinite;
+}
+
+@keyframes gradient{
+    to{
+        background-position:300% center;
+    }
+}
+
+.hero p{
+    max-width:650px;
+
+    margin:22px auto;
+
+    color:#98a1bd;
+
+    font-size:15px;
+
+    line-height:1.7;
+}
+
+/* MAIN */
+
+.wrapper{
+    width:min(1000px,92%);
+
+    margin:30px auto 80px;
+}
+
+.card{
+    padding:10px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.11),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.35);
+}
+
+.inner{
+    padding:30px;
+
+    border-radius:23px;
+
+    background:rgba(16,20,38,.82);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+}
+
+/* UPLOAD */
+
+.upload{
+    min-height:330px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    border:1.5px dashed rgba(128,108,255,.48);
+
+    border-radius:22px;
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(100,80,255,.10),
+            transparent 65%
+        );
+
+    transition:.35s;
+}
+
+.upload:hover,
+.upload.drag{
+    transform:translateY(-3px);
+
+    border-color:#806dff;
+
+    box-shadow:
+        0 20px 55px rgba(92,73,255,.15),
+        inset 0 0 50px rgba(92,73,255,.04);
+}
+
+.upload-content{
+    position:relative;
+    z-index:2;
+}
+
+.upload-icon{
+    width:90px;
+    height:90px;
+
+    margin:0 auto 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:27px;
+
+    font-size:42px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(91,79,255,.20),
+            rgba(0,210,255,.08)
+        );
+
+    border:1px solid rgba(117,102,255,.25);
+
+    animation:iconFloat 4s ease-in-out infinite;
+}
+
+@keyframes iconFloat{
+    0%,100%{
+        transform:translateY(0) rotate(0);
+    }
+
+    50%{
+        transform:translateY(-9px) rotate(3deg);
+    }
+}
+
+.upload h2{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.upload p{
+    color:#7e87a3;
+    font-size:13px;
+}
+
+.choose{
+    display:inline-block;
+
+    margin-top:18px;
+
+    padding:12px 23px;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:14px;
+    font-weight:700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7058ff,
+            #438eff
+        );
+
+    box-shadow:
+        0 12px 30px rgba(83,74,255,.25);
+
+    transition:.3s;
+}
+
+.choose:hover{
+    transform:translateY(-2px) scale(1.03);
+}
+
+#fileInput{
+    display:none;
+}
+
+/* WORKSPACE */
+
+.workspace{
+    display:none;
+    margin-top:25px;
+}
+
+.preview-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.preview{
+    min-height:320px;
+
+    border-radius:19px;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    background:rgba(255,255,255,.025);
+
+    overflow:hidden;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.preview-title{
+    position:absolute;
+
+    top:13px;
+    left:13px;
+
+    z-index:3;
+
+    padding:7px 11px;
+
+    border-radius:8px;
+
+    background:rgba(0,0,0,.45);
+
+    color:#c8cee0;
+
+    font-size:11px;
+    font-weight:600;
+
+    backdrop-filter:blur(8px);
+}
+
+.preview img{
+    max-width:100%;
+    max-height:400px;
+
+    object-fit:contain;
+
+    display:block;
+}
+
+/* CHECKER */
+
+.checker{
+    background-color:#e8e8e8;
+
+    background-image:
+        linear-gradient(45deg,#d2d2d2 25%,transparent 25%),
+        linear-gradient(-45deg,#d2d2d2 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#d2d2d2 75%),
+        linear-gradient(-45deg,transparent 75%,#d2d2d2 75%);
+
+    background-size:24px 24px;
+
+    background-position:
+        0 0,
+        0 12px,
+        12px -12px,
+        -12px 0;
+}
+
+/* CONTROLS */
+
+.controls{
+    margin-top:18px;
+
+    display:flex;
+
+    gap:12px;
+}
+
+.primary{
+    flex:1;
+
+    border:0;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    color:white;
+
+    font-weight:700;
+    font-size:14px;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            100deg,
+            #6d55ff,
+            #418eff,
+            #a24cff
+        );
+
+    background-size:200% auto;
+
+    box-shadow:
+        0 15px 35px rgba(82,69,255,.25);
+
+    animation:buttonMove 5s linear infinite;
+
+    transition:.3s;
+}
+
+@keyframes buttonMove{
+    to{
+        background-position:200% center;
+    }
+}
+
+.primary:hover{
+    transform:translateY(-2px);
+}
+
+.primary:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.secondary{
+    padding:15px 22px;
+
+    border-radius:14px;
+
+    color:#b9c0d7;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.secondary:hover{
+    color:white;
+    background:rgba(255,255,255,.07);
+}
+
+/* STATUS */
+
+.status{
+    display:none;
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.status-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#9ba4be;
+
+    font-size:12px;
+
+    margin-bottom:9px;
+}
+
+.progress{
+    height:8px;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.06);
+}
+
+.progress-bar{
+    height:100%;
+
+    width:0%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #715aff,
+            #4fdcff,
+            #d651ff
+        );
+
+    box-shadow:0 0 18px rgba(80,140,255,.7);
+
+    transition:.3s;
+}
+
+.status-note{
+    margin-top:10px;
+
+    color:#68728c;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+
+    margin-top:20px;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(67,220,171,.07),
+            rgba(80,90,255,.05)
+        );
+
+    border:1px solid rgba(74,222,178,.18);
+}
+
+.result-head{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.success{
+    width:44px;
+    height:44px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:rgba(63,220,171,.12);
+
+    color:#59e6b5;
+
+    font-size:20px;
+}
+
+.result-title{
+    font-size:16px;
+    font-weight:700;
+}
+
+.result-text{
+    margin-top:4px;
+
+    color:#747e99;
+
+    font-size:12px;
+}
+
+.download{
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:15px;
+
+    border-radius:13px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-size:14px;
+    font-weight:700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6450ff,
+            #3d91ff
+        );
+
+    box-shadow:
+        0 12px 30px rgba(76,72,255,.22);
+
+    transition:.3s;
+}
+
+.download:hover{
+    transform:translateY(-2px);
+}
+
+/* ERROR */
+
+.error{
+    display:none;
+
+    margin-top:15px;
+
+    padding:14px;
+
+    border-radius:13px;
+
+    color:#ff9fba;
+
+    background:rgba(255,60,100,.07);
+
+    border:1px solid rgba(255,80,110,.16);
+
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+
+    color:#626b84;
+
+    font-size:12px;
+
+    padding-bottom:30px;
+}
+
+.footer span{
+    color:#8879ff;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:17px 5%;
+    }
+
+    .hero{
+        padding-top:40px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .inner{
+        padding:18px;
+    }
+
+    .preview-grid{
+        grid-template-columns:1fr;
+    }
+
+    .preview{
+        min-height:250px;
+    }
+
+    .controls{
+        flex-direction:column;
+    }
+
+    .secondary{
+        width:100%;
+    }
+}
+
+@media(max-width:430px){
+
+    .logo{
+        font-size:18px;
+    }
+
+    .logo-icon{
+        width:36px;
+        height:36px;
+    }
+
+    .back{
+        padding:8px 11px;
+        font-size:12px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .upload{
+        min-height:280px;
+    }
+
+    .upload-icon{
+        width:75px;
+        height:75px;
+        font-size:34px;
+    }
+}
+</style>
+    <link rel="icon" type="image/webp" href="../assets/favicon.webp">
+    <link rel="apple-touch-icon" href="../assets/favicon.webp">
+</head>
+
+<body>
+
+<div class="background">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid"></div>
+</div>
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✦
+        </div>
+
+        <span>
+            PixelTools
+        </span>
+
+    </div>
+
+    <a class="back" href="../index.html">
+        ← Back to Tools
+    </a>
+
+</nav>
+
+
+<section class="hero">
+
+    <div class="badge">
+        <span class="dot"></span>
+        AI Background Removal
+    </div>
+
+    <h1>
+        Remove Your
+        <br>
+        <span class="gradient">
+            Image Background
+        </span>
+    </h1>
+
+    <p>
+        Automatically remove backgrounds from your images
+        directly in your browser. Your image stays on your device.
+    </p>
+
+</section>
+
+
+<div class="wrapper">
+
+    <div class="card">
+
+        <div class="inner">
+
+            <div class="upload" id="upload">
+
+                <div class="upload-content">
+
+                    <div class="upload-icon">
+                        🖼️
+                    </div>
+
+                    <h2>
+                        Drop your image here
+                    </h2>
+
+                    <p>
+                        JPG, PNG or WEBP
+                    </p>
+
+                    <span class="choose">
+                        Choose Image
+                    </span>
+
+                </div>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+            </div>
+
+
+            <div class="workspace" id="workspace">
+
+                <div class="preview-grid">
+
+                    <div class="preview">
+
+                        <div class="preview-title">
+                            ORIGINAL
+                        </div>
+
+                        <img
+                            id="originalPreview"
+                            alt="Original image"
+                        >
+
+                    </div>
+
+
+                    <div class="preview checker">
+
+                        <div class="preview-title">
+                            BACKGROUND REMOVED
+                        </div>
+
+                        <img
+                            id="resultPreview"
+                            alt="Background removed image"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="controls">
+
+                    <button
+                        class="primary"
+                        id="removeBackground"
+                    >
+                        ✨ Remove Background
+                    </button>
+
+                    <button
+                        class="secondary"
+                        id="reset"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+
+                <div class="status" id="status">
+
+                    <div class="status-top">
+
+                        <span id="statusText">
+                            Preparing AI...
+                        </span>
+
+                        <span id="statusPercent">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-bar"
+                            id="progressBar"
+                        ></div>
+
+                    </div>
+
+                    <div class="status-note">
+                        The first run can take longer because the AI
+                        model has to be downloaded into your browser.
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="error"
+                    id="errorBox"
+                ></div>
+
+
+                <div
+                    class="result"
+                    id="result"
+                >
+
+                    <div class="result-head">
+
+                        <div class="success">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <div class="result-title">
+                                Background removed!
+                            </div>
+
+                            <div class="result-text">
+                                Your transparent PNG is ready.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        class="download"
+                        id="download"
+                        href="#"
+                        download="pixeltools-background-removed.png"
+                    >
+                        ⬇ Download Transparent PNG
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+
+    Made with
+    <span>✦</span>
+    by PixelTools
+
+</div>
+
+
+<script type="module">
+
+import {
+    removeBackground
+} from "https://esm.sh/@imgly/background-removal@1.7.0";
+
+
+const upload =
+    document.getElementById("upload");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const workspace =
+    document.getElementById("workspace");
+
+const originalPreview =
+    document.getElementById("originalPreview");
+
+const resultPreview =
+    document.getElementById("resultPreview");
+
+const removeButton =
+    document.getElementById("removeBackground");
+
+const resetButton =
+    document.getElementById("reset");
+
+const status =
+    document.getElementById("status");
+
+const statusText =
+    document.getElementById("statusText");
+
+const statusPercent =
+    document.getElementById("statusPercent");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const result =
+    document.getElementById("result");
+
+const download =
+    document.getElementById("download");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+
+let selectedFile = null;
+
+let originalURL = null;
+
+let resultURL = null;
+
+
+/* ERROR */
+
+function showError(message){
+
+    errorBox.textContent = message;
+
+    errorBox.style.display = "block";
+
+}
+
+
+/* HIDE ERROR */
+
+function hideError(){
+
+    errorBox.textContent = "";
+
+    errorBox.style.display = "none";
+
+}
+
+
+/* PROGRESS */
+
+function setProgress(percent,text){
+
+    percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                percent
+            )
+        );
+
+    progressBar.style.width =
+        percent + "%";
+
+    statusPercent.textContent =
+        Math.round(percent) + "%";
+
+    statusText.textContent =
+        text;
+
+}
+
+
+/* FILE PICKER */
+
+upload.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === fileInput
+        ){
+            return;
+        }
+
+        fileInput.click();
+
+    }
+);
+
+
+/* FILE CHANGE */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        if(
+            fileInput.files &&
+            fileInput.files.length
+        ){
+
+            loadImage(
+                fileInput.files[0]
+            );
+
+        }
+
+    }
+);
+
+
+/* LOAD IMAGE */
+
+function loadImage(file){
+
+    hideError();
+
+    if(
+        ![
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ].includes(file.type)
+    ){
+
+        showError(
+            "Please select a JPG, PNG or WEBP image."
+        );
+
+        return;
+
+    }
+
+
+    selectedFile = file;
+
+
+    if(originalURL){
+
+        URL.revokeObjectURL(
+            originalURL
+        );
+
+    }
+
+
+    originalURL =
+        URL.createObjectURL(file);
+
+
+    originalPreview.src =
+        originalURL;
+
+
+    resultPreview.removeAttribute(
+        "src"
+    );
+
+
+    result.style.display =
+        "none";
+
+    status.style.display =
+        "none";
+
+
+    workspace.style.display =
+        "block";
+
+
+    workspace.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+
+}
+
+
+/* DRAG */
+
+["dragenter","dragover"].forEach(
+    function(name){
+
+        upload.addEventListener(
+            name,
+            function(event){
+
+                event.preventDefault();
+
+                upload.classList.add(
+                    "drag"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* DRAG LEAVE */
+
+["dragleave","drop"].forEach(
+    function(name){
+
+        upload.addEventListener(
+            name,
+            function(event){
+
+                event.preventDefault();
+
+                upload.classList.remove(
+                    "drag"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* DROP */
+
+upload.addEventListener(
+    "drop",
+    function(event){
+
+        const files =
+            event.dataTransfer.files;
+
+        if(files.length){
+
+            loadImage(
+                files[0]
+            );
+
+        }
+
+    }
+);
+
+
+/* REMOVE BACKGROUND */
+
+removeButton.addEventListener(
+    "click",
+    async function(){
+
+        if(!selectedFile){
+
+            return;
+
+        }
+
+
+        hideError();
+
+        result.style.display =
+            "none";
+
+        status.style.display =
+            "block";
+
+        removeButton.disabled =
+            true;
+
+
+        try{
+
+            setProgress(
+                5,
+                "Starting AI..."
+            );
+
+
+            /*
+             * IMPORTANT:
+             *
+             * We use isnet_quint8 here.
+             * This is the smaller browser-friendly
+             * version of the ISNet model.
+             */
+
+            const config = {
+
+                model:"isnet_quint8",
+
+                output:{
+                    format:"image/png",
+                    quality:1
+                },
+
+                /*
+                 * Model data hosted by IMG.LY
+                 */
+
+                publicPath:
+                    "https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/",
+
+                progress:
+                    function(
+                        key,
+                        current,
+                        total
+                    ){
+
+                        let percent = 0;
+
+                        if(
+                            total &&
+                            total > 0
+                        ){
+
+                            percent =
+                                (
+                                    current /
+                                    total
+                                ) * 100;
+
+                        }
+
+
+                        if(
+                            key &&
+                            (
+                                key.includes("fetch") ||
+                                key.includes("download")
+                            )
+                        ){
+
+                            setProgress(
+                                Math.min(
+                                    55,
+                                    percent * .55
+                                ),
+                                "Downloading AI model..."
+                            );
+
+                        }
+
+                        else if(
+                            key &&
+                            (
+                                key.includes("compute") ||
+                                key.includes("inference")
+                            )
+                        ){
+
+                            setProgress(
+                                55 +
+                                percent * .40,
+                                "Removing background..."
+                            );
+
+                        }
+
+                        else{
+
+                            setProgress(
+                                Math.min(
+                                    90,
+                                    10 +
+                                    percent * .50
+                                ),
+                                "Processing image..."
+                            );
+
+                        }
+
+                    }
+
+            };
+
+
+            setProgress(
+                10,
+                "Loading AI model..."
+            );
+
+
+            /*
+             * Run AI
+             */
+
+            const blob =
+                await removeBackground(
+                    selectedFile,
+                    config
+                );
+
+
+            if(
+                !blob ||
+                blob.size === 0
+            ){
+
+                throw new Error(
+                    "The AI returned an empty result."
+                );
+
+            }
+
+
+            setProgress(
+                94,
+                "Preparing transparent PNG..."
+            );
+
+
+            if(resultURL){
+
+                URL.revokeObjectURL(
+                    resultURL
+                );
+
+            }
+
+
+            resultURL =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            resultPreview.src =
+                resultURL;
+
+
+            download.href =
+                resultURL;
+
+
+            const filename =
+                selectedFile.name
+                    .replace(
+                        /\.[^/.]+$/,
+                        ""
+                    );
+
+
+            download.download =
+                filename +
+                "-background-removed.png";
+
+
+            setProgress(
+                100,
+                "Complete!"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    status.style.display =
+                        "none";
+
+                    result.style.display =
+                        "block";
+
+                    result.scrollIntoView({
+                        behavior:"smooth",
+                        block:"nearest"
+                    });
+
+                },
+                500
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Background removal error:",
+                error
+            );
+
+
+            status.style.display =
+                "none";
+
+
+            let message =
+                "Background removal failed.";
+
+
+            if(
+                error &&
+                error.message
+            ){
+
+                message +=
+                    " " +
+                    error.message;
+
+            }
+
+
+            showError(
+                message +
+                " Please refresh the page and try again."
+            );
+
+        }
+
+        finally{
+
+            removeButton.disabled =
+                false;
+
+        }
+
+    }
+);
+
+
+/* RESET */
+
+resetButton.addEventListener(
+    "click",
+    function(){
+
+        selectedFile = null;
+
+        fileInput.value = "";
+
+        workspace.style.display =
+            "none";
+
+        status.style.display =
+            "none";
+
+        result.style.display =
+            "none";
+
+        hideError();
+
+
+        if(originalURL){
+
+            URL.revokeObjectURL(
+                originalURL
+            );
+
+            originalURL = null;
+
+        }
+
+
+        if(resultURL){
+
+            URL.revokeObjectURL(
+                resultURL
+            );
+
+            resultURL = null;
+
+        }
+
+
+        originalPreview.removeAttribute(
+            "src"
+        );
+
+        resultPreview.removeAttribute(
+            "src"
+        );
+
+
+        progressBar.style.width =
+            "0%";
+
+        statusPercent.textContent =
+            "0%";
+
+        statusText.textContent =
+            "Preparing AI...";
+
+
+        removeButton.disabled =
+            false;
+
+    }
+);
+
+</script>
+
+</body>
+</html>
