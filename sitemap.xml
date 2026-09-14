@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-compressor.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/pdf-compressor.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/passport.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/background-remover.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-resizer.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-converter.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-cropper.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-metadata-remover.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-metadata-extractor.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/image-enhancer.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/merge-pdf.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/split-pdf.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/pdf-editor.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hackingjunction.github.io/PixelTools/tools/qr-generator.html</loc>
+    </url>
+
+</urlset>
